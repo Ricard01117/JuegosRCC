@@ -1,0 +1,265 @@
+@media (
+  max-width: 900px
+) {
+  .presentacion-arcade-rc {
+    grid-template-columns:
+      1fr;
+
+    gap: 32px;
+  }
+
+
+  .galeria-arcade {
+    width:
+      min(
+        650px,
+        100%
+      );
+
+    justify-self: center;
+  }
+}
+
+
+@media (
+  max-width: 700px
+) {
+  .encabezado-principal {
+    width:
+      calc(
+        100% - 22px
+      );
+
+    min-height: auto;
+
+    padding:
+      13px 0;
+
+    flex-direction:
+      column;
+
+    align-items:
+      stretch;
+  }
+
+
+  .acciones-header {
+    display: grid;
+
+    grid-template-columns:
+      1fr 1fr;
+  }
+
+
+  .boton-mas-juegos {
+    justify-content:
+      center;
+  }
+
+
+  .boton-tema {
+    min-width: 0;
+  }
+
+
+  .contenido-principal {
+    width:
+      calc(
+        100% - 22px
+      );
+
+    padding:
+      25px 0 50px;
+  }
+
+
+  .presentacion-arcade-rc {
+    min-height: auto;
+
+    padding: 21px;
+
+    border-radius: 21px;
+  }
+
+
+  .etiqueta-proyecto {
+    font-size: 11px;
+  }
+
+
+  .info-arcade-rc h1 {
+    font-size: 52px;
+  }
+
+
+  .descripcion-arcade {
+    font-size: 14px;
+  }
+
+
+  .funciones-arcade {
+    grid-template-columns:
+      1fr 1fr;
+  }
+
+
+  .funciones-arcade strong {
+    font-size: 13px;
+  }
+
+
+  .funciones-arcade small {
+    font-size: 10px;
+  }
+
+
+  .galeria-arcade {
+    min-height: 330px;
+  }
+
+
+  .captura-estadisticas {
+    width: 90%;
+
+    height: 245px;
+  }
+
+
+  .captura-portada {
+    width: 70%;
+
+    height: 180px;
+  }
+
+
+  .cabecera-juegos-locales {
+    flex-direction:
+      column;
+
+    align-items:
+      flex-start;
+  }
+
+
+  .rejilla-juegos {
+    grid-template-columns:
+      1fr;
+
+    gap: 12px;
+  }
+
+
+  .tarjeta-juego {
+    min-height: 315px;
+  }
+
+
+  /*
+  JUEGOS EN TELÉFONO
+  */
+
+  .juego-modal-overlay {
+    padding: 0;
+  }
+
+
+  .juego-modal {
+    width: 100%;
+
+    height: 100dvh;
+
+    max-height: 100dvh;
+
+    padding: 11px;
+
+    border: 0;
+
+    border-radius: 0;
+  }
+
+
+  .area-juego {
+    min-height:
+      calc(
+        100dvh - 80px
+      );
+
+    padding: 10px;
+  }
+
+
+  /*
+  PUENTE
+  */
+
+  .puente-overlay {
+    padding: 10px;
+  }
+
+
+  .puente-servidor {
+    min-height: 560px;
+
+    padding:
+      35px 18px;
+  }
+}
+
+
+@media (
+  max-width: 460px
+) {
+  .acciones-header {
+    grid-template-columns:
+      1fr;
+  }
+
+
+  .funciones-arcade {
+    grid-template-columns:
+      1fr;
+  }
+
+
+  .info-arcade-rc h1 {
+    font-size: 45px;
+  }
+
+
+  .descripcion-arcade {
+    font-size: 13px;
+  }
+
+
+  .boton-entrar-arcade
+  div > span {
+    font-size: 12px;
+  }
+
+
+  .boton-entrar-arcade
+  div > small {
+    max-width: 230px;
+
+    font-size: 9px;
+  }
+
+
+  .galeria-arcade {
+    min-height: 285px;
+  }
+
+
+  .captura-estadisticas {
+    width: 96%;
+
+    height: 215px;
+  }
+
+
+  .captura-portada {
+    width: 72%;
+
+    height: 145px;
+  }
+}

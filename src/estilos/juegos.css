@@ -1,0 +1,2384 @@
+/* ==========================================================
+   JUEGOSRCC
+   ESTILOS COMPARTIDOS DE LOS JUEGOS
+========================================================== */
+
+
+/* ==========================================================
+   OVERLAY GENERAL
+========================================================== */
+
+.juego-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  height: 100dvh;
+
+  padding: 10px;
+
+  overflow: hidden;
+
+  background:
+    rgba(
+      0,
+      0,
+      7,
+      0.92
+    );
+
+  backdrop-filter:
+    blur(8px);
+
+  -webkit-backdrop-filter:
+    blur(8px);
+}
+
+
+/* ==========================================================
+   MODAL BASE
+========================================================== */
+
+.juego-modal {
+  position: relative;
+
+  width:
+    min(
+      1040px,
+      calc(
+        100vw - 20px
+      )
+    );
+
+  height:
+    min(
+      92dvh,
+      820px
+    );
+
+  max-height:
+    calc(
+      100dvh - 16px
+    );
+
+  display: flex;
+  flex-direction: column;
+
+  padding: 14px;
+
+  overflow: hidden;
+
+  border:
+    1px solid
+    var(
+      --borde,
+      #00eaff
+    );
+
+  border-radius: 20px;
+
+  color:
+    var(
+      --texto,
+      #ffffff
+    );
+
+  background:
+    var(
+      --panel,
+      #050812
+    );
+
+  box-shadow:
+    0 0 22px
+    var(
+      --brillo,
+      rgba(
+        0,
+        234,
+        255,
+        0.24
+      )
+    ),
+    0 0 70px
+    rgba(
+      0,
+      234,
+      255,
+      0.08
+    );
+}
+
+
+.juego-modal-nuevo {
+  isolation: isolate;
+}
+
+
+/* ==========================================================
+   CABECERA DEL JUEGO
+========================================================== */
+
+.barra-juego {
+  flex:
+    0 0 auto;
+
+  width: 100%;
+
+  min-height: 58px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 14px;
+
+  padding:
+    2px 2px 10px;
+
+  border-bottom:
+    1px solid
+    color-mix(
+      in srgb,
+      var(
+        --borde,
+        #00eaff
+      )
+      28%,
+      transparent
+    );
+}
+
+
+.barra-juego-identidad {
+  min-width: 0;
+}
+
+
+.barra-juego-identidad span {
+  display: block;
+
+  margin-bottom: 3px;
+
+  color:
+    var(
+      --acento,
+      #00eaff
+    );
+
+  font-size: 8px;
+
+  font-weight: 1000;
+
+  letter-spacing: 2.5px;
+
+  line-height: 1;
+}
+
+
+.barra-juego-identidad h2 {
+  margin: 0;
+
+  color:
+    var(
+      --texto,
+      #ffffff
+    );
+
+  font-size: 22px;
+
+  font-weight: 1000;
+
+  line-height: 1.05;
+}
+
+
+.barra-juego-identidad small {
+  display: block;
+
+  margin-top: 4px;
+
+  color:
+    var(
+      --acento,
+      #00eaff
+    );
+
+  font-size: 7px;
+
+  font-weight: 900;
+
+  letter-spacing: 1.6px;
+}
+
+
+/* ==========================================================
+   BOTONES SUPERIORES
+========================================================== */
+
+.barra-juego-acciones {
+  flex:
+    0 0 auto;
+
+  display: flex;
+  align-items: center;
+
+  gap: 7px;
+}
+
+
+.reloj-juego,
+.boton-control-superior {
+  min-width: 42px;
+  height: 42px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border:
+    1px solid
+    color-mix(
+      in srgb,
+      var(
+        --borde,
+        #00eaff
+      )
+      55%,
+      transparent
+    );
+
+  border-radius: 11px;
+
+  background:
+    var(
+      --panel-2,
+      rgba(
+        255,
+        255,
+        255,
+        0.035
+      )
+    );
+
+  color:
+    var(
+      --texto,
+      #ffffff
+    );
+}
+
+
+.reloj-juego {
+  min-width: 61px;
+
+  padding:
+    0 10px;
+
+  color:
+    var(
+      --acento,
+      #00eaff
+    );
+
+  font-size: 9px;
+
+  font-weight: 1000;
+
+  letter-spacing: 0.5px;
+}
+
+
+.boton-control-superior {
+  appearance: none;
+
+  padding: 0;
+
+  font-size: 16px;
+
+  font-weight: 1000;
+
+  cursor: pointer;
+
+  touch-action: manipulation;
+
+  transition:
+    transform
+    0.18s ease,
+    border-color
+    0.18s ease,
+    background
+    0.18s ease,
+    box-shadow
+    0.18s ease;
+}
+
+
+.boton-control-superior:hover,
+.boton-control-superior:focus-visible {
+  transform:
+    translateY(
+      -1px
+    );
+
+  border-color:
+    var(
+      --acento,
+      #00eaff
+    );
+
+  background:
+    color-mix(
+      in srgb,
+      var(
+        --acento,
+        #00eaff
+      )
+      10%,
+      var(
+        --panel-2,
+        #0c111d
+      )
+    );
+
+  box-shadow:
+    0 0 16px
+    var(
+      --brillo,
+      rgba(
+        0,
+        234,
+        255,
+        0.25
+      )
+    );
+}
+
+
+.boton-control-superior:active {
+  transform:
+    scale(
+      0.94
+    );
+}
+
+
+/* ==========================================================
+   CONTENEDOR CENTRAL
+========================================================== */
+
+.lienzo-juego-contenedor {
+  position: relative;
+
+  flex:
+    1 1 auto;
+
+  width: 100%;
+
+  min-width: 0;
+  min-height: 0;
+
+  margin-top: 8px;
+
+  overflow: hidden;
+
+  border:
+    1px solid
+    color-mix(
+      in srgb,
+      var(
+        --borde,
+        #00eaff
+      )
+      46%,
+      transparent
+    );
+
+  border-radius: 14px;
+
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(
+        80,
+        0,
+        160,
+        0.08
+      ),
+      transparent
+      65%
+    ),
+    #03040b;
+}
+
+
+/* ==========================================================
+   JUEGO PROVISIONAL
+========================================================== */
+
+.lienzo-juego-provisional {
+  width: 100%;
+  height: 100%;
+
+  min-height: 320px;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 12px;
+
+  padding: 24px;
+
+  text-align: center;
+}
+
+
+.lienzo-juego-provisional > strong {
+  color:
+    var(
+      --acento,
+      #00eaff
+    );
+
+  font-size: 48px;
+
+  text-shadow:
+    0 0 25px
+    var(
+      --brillo,
+      rgba(
+        0,
+        234,
+        255,
+        0.28
+      )
+    );
+}
+
+
+.lienzo-juego-provisional h3 {
+  margin: 0;
+
+  color:
+    var(
+      --texto,
+      #ffffff
+    );
+
+  font-size: 23px;
+
+  font-weight: 1000;
+
+  letter-spacing: 2px;
+}
+
+
+.lienzo-juego-provisional small {
+  color:
+    var(
+      --texto-suave,
+      #aeb9cc
+    );
+
+  font-size: 13px;
+}
+
+
+/* ==========================================================
+   OVERLAY DE ESTADO
+========================================================== */
+
+.overlay-estado-juego {
+  position: absolute;
+  inset: 0;
+
+  z-index: 20;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 9px;
+
+  padding: 20px;
+
+  text-align: center;
+
+  background:
+    rgba(
+      0,
+      0,
+      10,
+      0.70
+    );
+
+  backdrop-filter:
+    blur(2px);
+
+  -webkit-backdrop-filter:
+    blur(2px);
+}
+
+
+.overlay-estado-juego > strong {
+  color:
+    var(
+      --acento,
+      #00eaff
+    );
+
+  font-size:
+    clamp(
+      26px,
+      4vw,
+      44px
+    );
+
+  font-weight: 1000;
+
+  letter-spacing: 4px;
+
+  text-shadow:
+    0 0 20px
+    var(
+      --brillo,
+      rgba(
+        0,
+        234,
+        255,
+        0.35
+      )
+    );
+}
+
+
+.overlay-estado-juego > h3 {
+  margin: 0;
+
+  color:
+    var(
+      --texto,
+      #ffffff
+    );
+
+  font-size:
+    clamp(
+      18px,
+      2.5vw,
+      28px
+    );
+}
+
+
+.overlay-estado-juego > span,
+.overlay-estado-juego > small {
+  color:
+    var(
+      --texto-suave,
+      #c8d1e0
+    );
+
+  font-size: 13px;
+
+  line-height: 1.5;
+}
+
+
+.overlay-estado-juego button {
+  min-height: 48px;
+
+  margin-top: 8px;
+
+  padding:
+    0 18px;
+
+  border:
+    1px solid
+    var(
+      --acento,
+      #00eaff
+    );
+
+  border-radius: 11px;
+
+  color:
+    var(
+      --texto,
+      #ffffff
+    );
+
+  background:
+    var(
+      --panel-2,
+      #0b1120
+    );
+
+  font-size: 13px;
+
+  font-weight: 1000;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 0 18px
+    var(
+      --brillo,
+      rgba(
+        0,
+        234,
+        255,
+        0.25
+      )
+    );
+}
+
+
+/* ==========================================================
+   CONTROLES TOUCH GENERALES
+========================================================== */
+
+.controles-touch {
+  flex:
+    0 0 auto;
+
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 18px;
+
+  padding:
+    9px 0 3px;
+
+  touch-action: none;
+
+  user-select: none;
+
+  -webkit-user-select: none;
+}
+
+
+.cruceta-touch,
+.grupo-direcciones,
+.controles-direccion {
+  position: relative;
+
+  width: 126px;
+  height: 96px;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      3,
+      40px
+    );
+
+  grid-template-rows:
+    repeat(
+      3,
+      40px
+    );
+
+  gap: 3px;
+
+  align-items: center;
+  justify-items: center;
+}
+
+
+.boton-touch,
+.control-touch-boton {
+  width: 40px;
+  height: 40px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
+  border:
+    1px solid
+    var(
+      --acento,
+      #00eaff
+    );
+
+  border-radius: 10px;
+
+  color:
+    var(
+      --acento,
+      #00eaff
+    );
+
+  background:
+    var(
+      --panel-2,
+      #0a0f1c
+    );
+
+  font-size: 16px;
+
+  font-weight: 1000;
+
+  cursor: pointer;
+
+  touch-action: manipulation;
+
+  box-shadow:
+    0 0 12px
+    rgba(
+      0,
+      234,
+      255,
+      0.07
+    );
+}
+
+
+.boton-touch:hover,
+.boton-touch:active,
+.control-touch-boton:hover,
+.control-touch-boton:active {
+  background:
+    color-mix(
+      in srgb,
+      var(
+        --acento,
+        #00eaff
+      )
+      16%,
+      var(
+        --panel-2,
+        #0a0f1c
+      )
+    );
+
+  box-shadow:
+    0 0 18px
+    var(
+      --brillo,
+      rgba(
+        0,
+        234,
+        255,
+        0.30
+      )
+    );
+}
+
+
+.boton-accion-touch {
+  width: 58px;
+  height: 58px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  flex:
+    0 0 58px;
+
+  padding: 0;
+
+  border:
+    1px solid
+    #ff2f90;
+
+  border-radius: 50%;
+
+  color:
+    #ff2f90;
+
+  background:
+    var(
+      --panel-2,
+      #0a0f1c
+    );
+
+  font-size: 18px;
+
+  font-weight: 1000;
+
+  cursor: pointer;
+
+  touch-action: manipulation;
+
+  box-shadow:
+    0 0 16px
+    rgba(
+      255,
+      47,
+      144,
+      0.14
+    );
+}
+
+
+.boton-accion-touch:hover,
+.boton-accion-touch:active {
+  box-shadow:
+    0 0 24px
+    rgba(
+      255,
+      47,
+      144,
+      0.42
+    );
+}
+
+
+.boton-touch-grande {
+  width:
+    min(
+      340px,
+      78vw
+    );
+
+  min-height: 55px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding:
+    0 22px;
+
+  border:
+    1px solid
+    var(
+      --acento,
+      #00eaff
+    );
+
+  border-radius: 12px;
+
+  color:
+    var(
+      --acento,
+      #00eaff
+    );
+
+  background:
+    var(
+      --panel-2,
+      #0a0f1c
+    );
+
+  font-size: 14px;
+
+  font-weight: 1000;
+
+  letter-spacing: 2px;
+
+  cursor: pointer;
+
+  touch-action: manipulation;
+
+  box-shadow:
+    0 0 18px
+    var(
+      --brillo,
+      rgba(
+        0,
+        234,
+        255,
+        0.18
+      )
+    );
+}
+
+
+/* ==========================================================
+   AYUDA INFERIOR
+========================================================== */
+
+.ayuda-juego {
+  flex:
+    0 0 auto;
+
+  min-height: 30px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-wrap: wrap;
+
+  gap: 6px;
+
+  padding:
+    5px 0 0;
+}
+
+
+.ayuda-juego span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 23px;
+
+  padding:
+    3px 8px;
+
+  border:
+    1px solid
+    color-mix(
+      in srgb,
+      var(
+        --borde,
+        #00eaff
+      )
+      32%,
+      transparent
+    );
+
+  border-radius: 999px;
+
+  color:
+    var(
+      --texto-suave,
+      #b9c5d6
+    );
+
+  background:
+    var(
+      --panel-2,
+      rgba(
+        255,
+        255,
+        255,
+        0.025
+      )
+    );
+
+  font-size: 7px;
+
+  font-weight: 800;
+
+  white-space: nowrap;
+}
+
+
+/* ==========================================================
+   CONFIGURACIÓN
+   COMPARTIDA POR LOS 4 JUEGOS
+========================================================== */
+
+.configuracion-overlay {
+  position: fixed;
+  inset: 0;
+
+  z-index: 5000;
+
+  width: 100%;
+  height: 100dvh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 12px;
+
+  overflow: auto;
+
+  overscroll-behavior: contain;
+
+  background:
+    rgba(
+      0,
+      0,
+      8,
+      0.80
+    );
+
+  backdrop-filter:
+    blur(10px);
+
+  -webkit-backdrop-filter:
+    blur(10px);
+}
+
+
+/* ==========================================================
+   CAJA DE CONFIGURACIÓN
+
+   IMPORTANTE:
+   El scroll ocurre DENTRO del modal.
+========================================================== */
+
+.configuracion-juego {
+  position: relative;
+
+  width:
+    min(
+      560px,
+      100%
+    );
+
+  max-height:
+    calc(
+      100dvh - 24px
+    );
+
+  display: flex;
+  flex-direction: column;
+
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  overscroll-behavior: contain;
+
+  scrollbar-gutter: stable;
+
+  border:
+    1px solid
+    var(
+      --borde,
+      #00eaff
+    );
+
+  border-radius: 20px;
+
+  color:
+    var(
+      --texto,
+      #ffffff
+    );
+
+  background:
+    var(
+      --panel,
+      #060a14
+    );
+
+  box-shadow:
+    0 0 25px
+    var(
+      --brillo,
+      rgba(
+        0,
+        234,
+        255,
+        0.25
+      )
+    ),
+    0 0 75px
+    rgba(
+      0,
+      234,
+      255,
+      0.08
+    );
+}
+
+
+/* ==========================================================
+   SCROLL
+========================================================== */
+
+.configuracion-juego {
+  scrollbar-width: thin;
+
+  scrollbar-color:
+    var(
+      --acento,
+      #00eaff
+    )
+    transparent;
+}
+
+
+.configuracion-juego::-webkit-scrollbar {
+  width: 7px;
+}
+
+
+.configuracion-juego::-webkit-scrollbar-track {
+  background:
+    transparent;
+}
+
+
+.configuracion-juego::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+
+  background:
+    var(
+      --acento,
+      #00eaff
+    );
+}
+
+
+/* ==========================================================
+   HEADER CONFIGURACIÓN
+========================================================== */
+
+.configuracion-header {
+  position: sticky;
+  top: 0;
+
+  z-index: 10;
+
+  flex:
+    0 0 auto;
+
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 14px;
+
+  padding:
+    20px 20px 16px;
+
+  border-bottom:
+    1px solid
+    color-mix(
+      in srgb,
+      var(
+        --borde,
+        #00eaff
+      )
+      35%,
+      transparent
+    );
+
+  background:
+    var(
+      --panel,
+      #060a14
+    );
+
+  box-shadow:
+    0 8px 18px
+    color-mix(
+      in srgb,
+      var(
+        --panel,
+        #060a14
+      )
+      85%,
+      transparent
+    );
+}
+
+
+.configuracion-header > div {
+  min-width: 0;
+}
+
+
+.configuracion-header span {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color:
+    var(
+      --acento,
+      #00eaff
+    );
+
+  font-size: 12px;
+
+  font-weight: 1000;
+
+  letter-spacing: 2.7px;
+}
+
+
+.configuracion-header h2 {
+  margin: 0;
+
+  color:
+    var(
+      --texto,
+      #ffffff
+    );
+
+  font-size:
+    clamp(
+      26px,
+      4vw,
+      34px
+    );
+
+  font-weight: 1000;
+
+  line-height: 1.05;
+}
+
+
+.configuracion-cerrar {
+  flex:
+    0 0 44px;
+
+  width: 44px;
+  height: 44px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
+  border:
+    1px solid
+    color-mix(
+      in srgb,
+      var(
+        --borde,
+        #00eaff
+      )
+      55%,
+      transparent
+    );
+
+  border-radius: 11px;
+
+  color:
+    var(
+      --texto,
+      #ffffff
+    );
+
+  background:
+    var(
+      --panel-2,
+      #0c111d
+    );
+
+  font-size: 25px;
+
+  font-weight: 1000;
+
+  cursor: pointer;
+
+  touch-action: manipulation;
+
+  transition:
+    transform
+    0.18s ease,
+    border-color
+    0.18s ease,
+    box-shadow
+    0.18s ease;
+}
+
+
+.configuracion-cerrar:hover,
+.configuracion-cerrar:focus-visible {
+  transform:
+    scale(
+      1.05
+    );
+
+  border-color:
+    var(
+      --acento,
+      #00eaff
+    );
+
+  box-shadow:
+    0 0 18px
+    var(
+      --brillo,
+      rgba(
+        0,
+        234,
+        255,
+        0.28
+      )
+    );
+}
+
+
+/* ==========================================================
+   PROGRESIÓN AUTOMÁTICA
+========================================================== */
+
+.configuracion-niveles-auto {
+  margin:
+    16px 20px 5px;
+
+  padding: 17px;
+
+  border:
+    1px solid
+    var(
+      --acento,
+      #00eaff
+    );
+
+  border-radius: 14px;
+
+  background:
+    color-mix(
+      in srgb,
+      var(
+        --acento,
+        #00eaff
+      )
+      7%,
+      var(
+        --panel-2,
+        #0c111d
+      )
+    );
+
+  box-shadow:
+    inset
+    0 0 20px
+    color-mix(
+      in srgb,
+      var(
+        --acento,
+        #00eaff
+      )
+      5%,
+      transparent
+    );
+}
+
+
+.configuracion-niveles-auto > span {
+  display: block;
+
+  margin-bottom: 8px;
+
+  color:
+    var(
+      --acento,
+      #00eaff
+    );
+
+  font-size: 10px;
+
+  font-weight: 1000;
+
+  letter-spacing: 2.4px;
+}
+
+
+.configuracion-niveles-auto > strong {
+  display: block;
+
+  margin-bottom: 8px;
+
+  color:
+    var(
+      --texto,
+      #ffffff
+    );
+
+  font-size: 25px;
+
+  font-weight: 1000;
+
+  line-height: 1.1;
+}
+
+
+.configuracion-niveles-auto p {
+  margin: 0;
+
+  color:
+    var(
+      --texto-suave,
+      #b7c2d3
+    );
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  line-height: 1.55;
+}
+
+
+/* ==========================================================
+   SECCIONES CONFIGURACIÓN
+========================================================== */
+
+.configuracion-seccion {
+  padding:
+    15px 20px 0;
+}
+
+
+.configuracion-seccion > strong {
+  display: block;
+
+  margin-bottom: 12px;
+
+  color:
+    var(
+      --texto,
+      #ffffff
+    );
+
+  font-size: 21px;
+
+  font-weight: 1000;
+}
+
+
+/* ==========================================================
+   DIFICULTAD
+========================================================== */
+
+.selector-dificultad {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      3,
+      minmax(
+        0,
+        1fr
+      )
+    );
+
+  gap: 8px;
+}
+
+
+.selector-dificultad button {
+  min-height: 48px;
+
+  padding:
+    0 10px;
+
+  border:
+    1px solid
+    color-mix(
+      in srgb,
+      var(
+        --borde,
+        #00eaff
+      )
+      45%,
+      transparent
+    );
+
+  border-radius: 11px;
+
+  color:
+    var(
+      --texto,
+      #ffffff
+    );
+
+  background:
+    var(
+      --panel-2,
+      #0b101b
+    );
+
+  font-size: 14px;
+
+  font-weight: 900;
+
+  cursor: pointer;
+
+  touch-action: manipulation;
+
+  transition:
+    transform
+    0.18s ease,
+    border-color
+    0.18s ease,
+    background
+    0.18s ease,
+    box-shadow
+    0.18s ease;
+}
+
+
+.selector-dificultad button:hover {
+  transform:
+    translateY(
+      -1px
+    );
+
+  border-color:
+    var(
+      --acento,
+      #00eaff
+    );
+}
+
+
+.selector-dificultad button.activo {
+  border-color:
+    var(
+      --acento,
+      #00eaff
+    );
+
+  color:
+    var(
+      --texto,
+      #ffffff
+    );
+
+  background:
+    color-mix(
+      in srgb,
+      var(
+        --acento,
+        #00eaff
+      )
+      17%,
+      var(
+        --panel-2,
+        #0b101b
+      )
+    );
+
+  box-shadow:
+    0 0 18px
+    var(
+      --brillo,
+      rgba(
+        0,
+        234,
+        255,
+        0.20
+      )
+    );
+}
+
+
+/* ==========================================================
+   LISTA DE COLORES
+========================================================== */
+
+.lista-colores {
+  display: flex;
+  flex-direction: column;
+
+  gap: 9px;
+}
+
+
+.fila-color {
+  width: 100%;
+
+  min-height: 57px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 14px;
+
+  padding:
+    10px 12px;
+
+  border:
+    1px solid
+    color-mix(
+      in srgb,
+      var(
+        --borde,
+        #00eaff
+      )
+      38%,
+      transparent
+    );
+
+  border-radius: 11px;
+
+  color:
+    var(
+      --texto,
+      #ffffff
+    );
+
+  background:
+    var(
+      --panel-2,
+      #0b101b
+    );
+
+  transition:
+    border-color
+    0.18s ease,
+    box-shadow
+    0.18s ease,
+    transform
+    0.18s ease;
+}
+
+
+.fila-color:hover {
+  transform:
+    translateX(
+      2px
+    );
+
+  border-color:
+    var(
+      --acento,
+      #00eaff
+    );
+
+  box-shadow:
+    0 0 14px
+    color-mix(
+      in srgb,
+      var(
+        --acento,
+        #00eaff
+      )
+      12%,
+      transparent
+    );
+}
+
+
+.fila-color span {
+  min-width: 0;
+
+  color:
+    var(
+      --texto,
+      #ffffff
+    );
+
+  font-size: 17px;
+
+  font-weight: 900;
+
+  line-height: 1.25;
+}
+
+
+.fila-color input[type="color"] {
+  flex:
+    0 0 48px;
+
+  width: 48px;
+  height: 31px;
+
+  padding: 2px;
+
+  border:
+    1px solid
+    color-mix(
+      in srgb,
+      var(
+        --borde,
+        #00eaff
+      )
+      55%,
+      transparent
+    );
+
+  border-radius: 6px;
+
+  background:
+    transparent;
+
+  cursor: pointer;
+
+  touch-action: manipulation;
+}
+
+
+/* ==========================================================
+   FOOTER CONFIGURACIÓN
+========================================================== */
+
+.configuracion-footer {
+  position: sticky;
+  bottom: 0;
+
+  z-index: 10;
+
+  flex:
+    0 0 auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  gap: 9px;
+
+  margin-top: 16px;
+
+  padding:
+    14px 20px 18px;
+
+  border-top:
+    1px solid
+    color-mix(
+      in srgb,
+      var(
+        --borde,
+        #00eaff
+      )
+      35%,
+      transparent
+    );
+
+  background:
+    var(
+      --panel,
+      #060a14
+    );
+
+  box-shadow:
+    0 -8px 18px
+    color-mix(
+      in srgb,
+      var(
+        --panel,
+        #060a14
+      )
+      85%,
+      transparent
+    );
+}
+
+
+.boton-restablecer,
+.boton-listo {
+  min-width: 108px;
+  min-height: 45px;
+
+  padding:
+    0 15px;
+
+  border-radius: 10px;
+
+  font-size: 14px;
+
+  font-weight: 1000;
+
+  cursor: pointer;
+
+  touch-action: manipulation;
+
+  transition:
+    transform
+    0.18s ease,
+    border-color
+    0.18s ease,
+    background
+    0.18s ease,
+    box-shadow
+    0.18s ease;
+}
+
+
+.boton-restablecer {
+  border:
+    1px solid
+    color-mix(
+      in srgb,
+      var(
+        --borde,
+        #00eaff
+      )
+      40%,
+      transparent
+    );
+
+  color:
+    var(
+      --texto,
+      #ffffff
+    );
+
+  background:
+    var(
+      --panel-2,
+      #0b101b
+    );
+}
+
+
+.boton-listo {
+  border:
+    1px solid
+    var(
+      --acento,
+      #00eaff
+    );
+
+  color:
+    var(
+      --texto,
+      #ffffff
+    );
+
+  background:
+    color-mix(
+      in srgb,
+      var(
+        --acento,
+        #00eaff
+      )
+      18%,
+      var(
+        --panel-2,
+        #0b101b
+      )
+    );
+
+  box-shadow:
+    0 0 16px
+    var(
+      --brillo,
+      rgba(
+        0,
+        234,
+        255,
+        0.22
+      )
+    );
+}
+
+
+.boton-restablecer:hover,
+.boton-listo:hover {
+  transform:
+    translateY(
+      -1px
+    );
+
+  border-color:
+    var(
+      --acento,
+      #00eaff
+    );
+}
+
+
+.boton-restablecer:active,
+.boton-listo:active {
+  transform:
+    scale(
+      0.97
+    );
+}
+
+
+/* ==========================================================
+   TABLET
+========================================================== */
+
+@media (
+  max-width: 850px
+) {
+  .juego-modal-overlay {
+    padding: 6px;
+  }
+
+
+  .juego-modal {
+    width:
+      calc(
+        100vw - 12px
+      );
+
+    height:
+      calc(
+        100dvh - 12px
+      );
+
+    max-height:
+      calc(
+        100dvh - 12px
+      );
+
+    padding: 10px;
+
+    border-radius: 16px;
+  }
+
+
+  .barra-juego-identidad h2 {
+    font-size: 20px;
+  }
+
+
+  .reloj-juego {
+    min-width: 56px;
+  }
+
+
+  .reloj-juego,
+  .boton-control-superior {
+    height: 39px;
+  }
+
+
+  .boton-control-superior {
+    min-width: 39px;
+  }
+}
+
+
+/* ==========================================================
+   TELÉFONO
+========================================================== */
+
+@media (
+  max-width: 700px
+) {
+  .juego-modal-overlay {
+    padding: 0;
+  }
+
+
+  .juego-modal {
+    width: 100%;
+    height: 100dvh;
+
+    max-height: 100dvh;
+
+    padding: 7px;
+
+    border: 0;
+    border-radius: 0;
+  }
+
+
+  .barra-juego {
+    min-height: 51px;
+
+    gap: 7px;
+
+    padding:
+      1px 1px 6px;
+  }
+
+
+  .barra-juego-identidad span {
+    font-size: 6px;
+
+    letter-spacing: 1.6px;
+  }
+
+
+  .barra-juego-identidad h2 {
+    font-size: 18px;
+  }
+
+
+  .barra-juego-identidad small {
+    font-size: 6px;
+
+    letter-spacing: 1px;
+  }
+
+
+  .barra-juego-acciones {
+    gap: 4px;
+  }
+
+
+  .reloj-juego,
+  .boton-control-superior {
+    height: 37px;
+
+    border-radius: 9px;
+  }
+
+
+  .reloj-juego {
+    min-width: 53px;
+
+    padding:
+      0 6px;
+
+    font-size: 7px;
+  }
+
+
+  .boton-control-superior {
+    min-width: 37px;
+
+    font-size: 14px;
+  }
+
+
+  .lienzo-juego-contenedor {
+    margin-top: 4px;
+
+    border-radius: 10px;
+  }
+
+
+  .ayuda-juego {
+    min-height: 25px;
+
+    gap: 3px;
+
+    padding-top: 3px;
+  }
+
+
+  .ayuda-juego span {
+    min-height: 20px;
+
+    padding:
+      2px 5px;
+
+    font-size: 5.5px;
+  }
+
+
+  /*
+  ========================================================
+  CONFIGURACIÓN MÓVIL
+  ========================================================
+  */
+
+  .configuracion-overlay {
+    align-items: center;
+
+    padding: 6px;
+  }
+
+
+  .configuracion-juego {
+    width: 100%;
+
+    max-height:
+      calc(
+        100dvh - 12px
+      );
+
+    border-radius: 15px;
+  }
+
+
+  .configuracion-header {
+    padding:
+      15px 14px 12px;
+  }
+
+
+  .configuracion-header span {
+    margin-bottom: 5px;
+
+    font-size: 9px;
+
+    letter-spacing: 1.8px;
+  }
+
+
+  .configuracion-header h2 {
+    font-size: 24px;
+  }
+
+
+  .configuracion-cerrar {
+    flex-basis: 40px;
+
+    width: 40px;
+    height: 40px;
+
+    font-size: 22px;
+  }
+
+
+  .configuracion-niveles-auto {
+    margin:
+      12px 14px 3px;
+
+    padding: 13px;
+  }
+
+
+  .configuracion-niveles-auto > span {
+    font-size: 8px;
+
+    letter-spacing: 1.6px;
+  }
+
+
+  .configuracion-niveles-auto > strong {
+    font-size: 21px;
+  }
+
+
+  .configuracion-niveles-auto p {
+    font-size: 13px;
+
+    line-height: 1.5;
+  }
+
+
+  .configuracion-seccion {
+    padding:
+      12px 14px 0;
+  }
+
+
+  .configuracion-seccion > strong {
+    margin-bottom: 9px;
+
+    font-size: 19px;
+  }
+
+
+  .fila-color {
+    min-height: 52px;
+
+    padding:
+      8px 10px;
+  }
+
+
+  .fila-color span {
+    font-size: 15px;
+  }
+
+
+  .fila-color input[type="color"] {
+    flex-basis: 44px;
+
+    width: 44px;
+    height: 29px;
+  }
+
+
+  .selector-dificultad {
+    gap: 5px;
+  }
+
+
+  .selector-dificultad button {
+    min-height: 44px;
+
+    padding:
+      0 6px;
+
+    font-size: 12px;
+  }
+
+
+  .configuracion-footer {
+    gap: 7px;
+
+    margin-top: 12px;
+
+    padding:
+      11px 14px 14px;
+  }
+
+
+  .boton-restablecer,
+  .boton-listo {
+    flex: 1;
+
+    min-width: 0;
+    min-height: 43px;
+
+    padding:
+      0 10px;
+
+    font-size: 12px;
+  }
+}
+
+
+/* ==========================================================
+   TELÉFONOS MUY PEQUEÑOS
+========================================================== */
+
+@media (
+  max-width: 430px
+) {
+  .configuracion-overlay {
+    padding: 4px;
+  }
+
+
+  .configuracion-juego {
+    max-height:
+      calc(
+        100dvh - 8px
+      );
+
+    border-radius: 13px;
+  }
+
+
+  .configuracion-header {
+    padding:
+      12px 11px 10px;
+  }
+
+
+  .configuracion-header h2 {
+    font-size: 22px;
+  }
+
+
+  .configuracion-niveles-auto {
+    margin:
+      10px 11px 2px;
+
+    padding: 11px;
+  }
+
+
+  .configuracion-niveles-auto > strong {
+    font-size: 19px;
+  }
+
+
+  .configuracion-niveles-auto p {
+    font-size: 12px;
+  }
+
+
+  .configuracion-seccion {
+    padding:
+      10px 11px 0;
+  }
+
+
+  .configuracion-seccion > strong {
+    font-size: 18px;
+  }
+
+
+  .lista-colores {
+    gap: 7px;
+  }
+
+
+  .fila-color {
+    min-height: 49px;
+
+    padding:
+      7px 9px;
+  }
+
+
+  .fila-color span {
+    font-size: 14px;
+  }
+
+
+  .configuracion-footer {
+    padding:
+      10px 11px 11px;
+  }
+}
+
+
+/* ==========================================================
+   PANTALLAS BAJAS
+========================================================== */
+
+@media (
+  max-height: 680px
+) {
+  .configuracion-overlay {
+    align-items: flex-start;
+
+    padding:
+      5px;
+  }
+
+
+  .configuracion-juego {
+    max-height:
+      calc(
+        100dvh - 10px
+      );
+  }
+
+
+  .configuracion-header {
+    padding-top: 12px;
+    padding-bottom: 10px;
+  }
+
+
+  .configuracion-niveles-auto {
+    margin-top: 10px;
+  }
+
+
+  .fila-color {
+    min-height: 48px;
+  }
+
+
+  .configuracion-footer {
+    padding-top: 9px;
+    padding-bottom: 10px;
+  }
+}
+
+
+/* ==========================================================
+   DISPOSITIVOS TOUCH
+========================================================== */
+
+@media (
+  hover: none
+) and (
+  pointer: coarse
+) {
+  .boton-control-superior,
+  .boton-touch,
+  .control-touch-boton,
+  .boton-accion-touch,
+  .boton-touch-grande,
+  .selector-dificultad button,
+  .boton-restablecer,
+  .boton-listo,
+  .configuracion-cerrar {
+    -webkit-tap-highlight-color:
+      transparent;
+  }
+
+
+  .fila-color:hover {
+    transform: none;
+
+    box-shadow: none;
+  }
+
+
+  .boton-control-superior:active,
+  .boton-touch:active,
+  .control-touch-boton:active,
+  .boton-accion-touch:active,
+  .boton-touch-grande:active,
+  .selector-dificultad button:active,
+  .boton-restablecer:active,
+  .boton-listo:active {
+    transform:
+      scale(
+        0.94
+      );
+  }
+}

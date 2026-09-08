@@ -1,0 +1,554 @@
+/* ==========================================================
+   FLAPPY
+========================================================== */
+
+.juego-modal-flappy {
+  width: min(1050px, calc(100vw - 24px));
+  height: min(92dvh, 800px);
+  max-height: calc(100dvh - 16px);
+
+  padding: 14px;
+
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden;
+}
+
+
+.juego-modal-flappy
+.barra-juego {
+  flex: 0 0 auto;
+
+  min-height: 68px;
+
+  margin-bottom: 8px;
+}
+
+
+.juego-modal-flappy
+.barra-juego-identidad span {
+  font-size: 11px;
+
+  letter-spacing: 3px;
+}
+
+
+.juego-modal-flappy
+.barra-juego-identidad h2 {
+  margin-top: 4px;
+
+  font-size: 30px;
+}
+
+
+.juego-modal-flappy
+.barra-juego-identidad small {
+  margin-top: 4px;
+
+  font-size: 10px;
+}
+
+
+.juego-modal-flappy
+.lienzo-juego-contenedor {
+  flex: 1 1 auto;
+
+  width: 100%;
+
+  min-height: 0;
+
+  height: auto;
+
+  aspect-ratio: auto;
+
+  padding: 7px;
+
+  overflow: hidden;
+}
+
+
+.flappy-juego {
+  width: 100%;
+
+  height: 100%;
+
+  min-height: 0;
+
+  display: grid;
+
+  grid-template-rows:
+    auto
+    minmax(0, 1fr);
+
+  gap: 9px;
+}
+
+
+/* ==========================================================
+   HUD
+========================================================== */
+
+.flappy-hud {
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, 1fr);
+
+  gap: 8px;
+}
+
+
+.flappy-hud > div {
+  min-height: 58px;
+
+  padding: 8px 13px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 10px;
+
+  border:
+    1px solid
+    var(--borde);
+
+  border-radius: 11px;
+
+  background:
+    var(--panel-2);
+}
+
+
+.flappy-hud span {
+  color:
+    var(--texto-suave);
+
+  font-size: 10px;
+
+  font-weight: 900;
+
+  letter-spacing: 2px;
+}
+
+
+.flappy-hud strong {
+  color:
+    var(--acento);
+
+  font-size: 21px;
+
+  font-weight: 1000;
+
+  text-shadow:
+    0 0 15px
+    var(--brillo);
+}
+
+
+/* ==========================================================
+   CANVAS
+========================================================== */
+
+.flappy-canvas-wrapper {
+  width: 100%;
+
+  height: 100%;
+
+  min-height: 0;
+
+  position: relative;
+
+  overflow: hidden;
+
+  border:
+    1px solid
+    var(--borde);
+
+  border-radius: 14px;
+
+  background:
+    #071b2c;
+
+  touch-action: none;
+
+  user-select: none;
+
+  cursor: pointer;
+}
+
+
+.canvas-flappy {
+  width: 100%;
+
+  height: 100%;
+
+  display: block;
+}
+
+
+/* ==========================================================
+   TEXTO INICIAL
+========================================================== */
+
+.juego-modal-flappy
+.overlay-estado-juego
+> strong {
+  font-size:
+    clamp(
+      34px,
+      5vw,
+      55px
+    );
+
+  letter-spacing: 5px;
+}
+
+
+.juego-modal-flappy
+.overlay-estado-juego
+> small {
+  margin-top: 7px;
+
+  font-size: 16px;
+}
+
+
+.instrucciones-flappy {
+  margin-top: 17px;
+
+  display: flex;
+
+  flex-wrap: wrap;
+
+  justify-content: center;
+
+  gap: 9px;
+}
+
+
+.instrucciones-flappy span {
+  padding: 9px 13px;
+
+  border:
+    1px solid
+    rgba(
+      255,
+      255,
+      255,
+      0.2
+    );
+
+  border-radius: 999px;
+
+  color: #ffffff;
+
+  font-size: 12px;
+}
+
+
+/* ==========================================================
+   AVISO DE NIVEL
+========================================================== */
+
+.aviso-nivel-flappy {
+  position: absolute;
+
+  left: 50%;
+  top: 50%;
+
+  z-index: 30;
+
+  transform:
+    translate(
+      -50%,
+      -50%
+    );
+
+  padding:
+    18px 28px;
+
+  border:
+    2px solid
+    var(--acento);
+
+  border-radius: 13px;
+
+  color:
+    var(--acento);
+
+  background:
+    rgba(
+      0,
+      0,
+      0,
+      0.88
+    );
+
+  font-size: 31px;
+
+  font-weight: 1000;
+
+  letter-spacing: 5px;
+
+  white-space: nowrap;
+
+  box-shadow:
+    0 0 45px
+    var(--brillo);
+
+  animation:
+    nivelFlappy
+    1.2s ease
+    forwards;
+
+  pointer-events: none;
+}
+
+
+@keyframes nivelFlappy {
+  0% {
+    opacity: 0;
+
+    transform:
+      translate(
+        -50%,
+        -45%
+      )
+      scale(0.7);
+  }
+
+  20% {
+    opacity: 1;
+
+    transform:
+      translate(
+        -50%,
+        -50%
+      )
+      scale(1.08);
+  }
+
+  75% {
+    opacity: 1;
+
+    transform:
+      translate(
+        -50%,
+        -50%
+      )
+      scale(1);
+  }
+
+  100% {
+    opacity: 0;
+
+    transform:
+      translate(
+        -50%,
+        -55%
+      )
+      scale(1);
+  }
+}
+
+
+/* ==========================================================
+   BOTÓN SALTAR
+========================================================== */
+
+.juego-modal-flappy
+.controles-touch {
+  flex: 0 0 auto;
+
+  min-height: 82px;
+
+  padding: 8px 0 0;
+}
+
+
+.juego-modal-flappy
+.boton-touch-grande {
+  width:
+    min(
+      340px,
+      80vw
+    );
+
+  height: 58px;
+
+  font-size: 15px;
+
+  font-weight: 1000;
+
+  letter-spacing: 3px;
+
+  box-shadow:
+    0 0 22px
+    var(--brillo);
+}
+
+
+.juego-modal-flappy
+.ayuda-juego {
+  flex: 0 0 auto;
+
+  min-height: 32px;
+
+  margin-top: 3px;
+
+  padding-bottom: 2px;
+}
+
+
+.juego-modal-flappy
+.ayuda-juego span {
+  font-size: 9px;
+}
+
+
+/* ==========================================================
+   TELÉFONO
+========================================================== */
+
+@media (
+  max-width: 700px
+) {
+  .juego-modal-flappy {
+    width: 100%;
+
+    height: 100dvh;
+
+    max-height: 100dvh;
+
+    padding: 7px;
+
+    border: 0;
+
+    border-radius: 0;
+  }
+
+
+  .juego-modal-flappy
+  .barra-juego {
+    min-height: 56px;
+
+    margin-bottom: 4px;
+  }
+
+
+  .juego-modal-flappy
+  .barra-juego-identidad
+  h2 {
+    font-size: 23px;
+  }
+
+
+  .juego-modal-flappy
+  .lienzo-juego-contenedor {
+    padding: 3px;
+  }
+
+
+  .flappy-hud {
+    grid-template-columns:
+      repeat(2, 1fr);
+
+    gap: 4px;
+  }
+
+
+  .flappy-hud > div {
+    min-height: 43px;
+
+    padding: 5px 8px;
+  }
+
+
+  .flappy-hud span {
+    font-size: 8px;
+  }
+
+
+  .flappy-hud strong {
+    font-size: 15px;
+  }
+
+
+  .juego-modal-flappy
+  .controles-touch {
+    min-height: 75px;
+
+    padding-top: 5px;
+  }
+
+
+  .juego-modal-flappy
+  .boton-touch-grande {
+    height: 54px;
+
+    font-size: 14px;
+  }
+
+
+  .juego-modal-flappy
+  .ayuda-juego {
+    display: none;
+  }
+
+
+  .juego-modal-flappy
+  .overlay-estado-juego
+  > strong {
+    font-size: 31px;
+  }
+
+
+  .juego-modal-flappy
+  .overlay-estado-juego
+  > small {
+    font-size: 13px;
+  }
+
+
+  .instrucciones-flappy span {
+    font-size: 10px;
+
+    padding: 7px 9px;
+  }
+}
+
+
+/* ==========================================================
+   PANTALLAS BAJAS
+========================================================== */
+
+@media (
+  max-height: 650px
+) {
+  .juego-modal-flappy
+  .barra-juego {
+    min-height: 49px;
+  }
+
+
+  .juego-modal-flappy
+  .controles-touch {
+    min-height: 62px;
+  }
+
+
+  .juego-modal-flappy
+  .boton-touch-grande {
+    height: 48px;
+  }
+
+
+  .juego-modal-flappy
+  .ayuda-juego {
+    display: none;
+  }
+}

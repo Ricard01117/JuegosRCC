@@ -1,0 +1,1252 @@
+/* ==========================================================
+   MODAL PAC-MAN
+========================================================== */
+
+.juego-modal-pacman {
+  width:
+    min(
+      1050px,
+      calc(100vw - 20px)
+    );
+
+  height:
+    min(
+      94dvh,
+      850px
+    );
+
+  max-height:
+    calc(100dvh - 12px);
+
+  padding: 13px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  overflow: hidden;
+}
+
+
+.juego-modal-pacman
+.barra-juego {
+  min-height: 62px;
+
+  flex: 0 0 auto;
+
+  margin-bottom: 7px;
+}
+
+
+.juego-modal-pacman
+.barra-juego-identidad h2 {
+  font-size: 27px;
+}
+
+
+.juego-modal-pacman
+.barra-juego-identidad span {
+  font-size: 10px;
+
+  letter-spacing: 3px;
+}
+
+
+.juego-modal-pacman
+.barra-juego-identidad small {
+  font-size: 9px;
+
+  letter-spacing: 2px;
+}
+
+
+.juego-modal-pacman
+.lienzo-juego-contenedor {
+  flex: 1 1 auto;
+
+  width: 100%;
+
+  height: auto;
+
+  min-height: 0;
+
+  aspect-ratio: auto;
+
+  padding: 6px;
+
+  overflow: hidden;
+}
+
+
+/* ==========================================================
+   JUEGO
+========================================================== */
+
+.pacman-juego {
+  width: 100%;
+
+  height: 100%;
+
+  min-height: 0;
+
+  display: grid;
+
+  grid-template-rows:
+    auto
+    auto
+    minmax(0, 1fr)
+    auto;
+
+  gap: 7px;
+}
+
+
+/* ==========================================================
+   HUD
+========================================================== */
+
+.pacman-hud {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      5,
+      1fr
+    );
+
+  gap: 7px;
+}
+
+
+.pacman-panel {
+  min-height: 56px;
+
+  padding: 8px 11px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 8px;
+
+  border:
+    1px solid
+    rgba(
+      0,
+      238,
+      255,
+      0.48
+    );
+
+  border-radius: 11px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(
+        10,
+        15,
+        32,
+        0.98
+      ),
+      rgba(
+        3,
+        6,
+        18,
+        0.98
+      )
+    );
+
+  box-shadow:
+    inset
+    0 0 12px
+    rgba(
+      0,
+      238,
+      255,
+      0.05
+    ),
+    0 0 11px
+    rgba(
+      0,
+      238,
+      255,
+      0.08
+    );
+}
+
+
+.pacman-panel span {
+  color:
+    #a9efff;
+
+  font-size: 8px;
+
+  font-weight: 1000;
+
+  letter-spacing: 2px;
+}
+
+
+.pacman-panel strong {
+  color:
+    #ffffff;
+
+  font-size: 18px;
+
+  font-weight: 1000;
+
+  text-shadow:
+    0 0 10px
+    rgba(
+      255,
+      255,
+      255,
+      0.25
+    );
+}
+
+
+.pacman-vidas {
+  display: flex;
+
+  align-items: center;
+
+  gap: 7px;
+
+  color:
+    #ffe600 !important;
+}
+
+
+.pacman-mini {
+  width: 20px;
+
+  height: 20px;
+
+  display: inline-block;
+
+  border-radius: 50%;
+
+  background:
+    conic-gradient(
+      from 35deg,
+      transparent
+      0deg 55deg,
+      var(
+        --pacman-color
+      )
+      55deg 360deg
+    );
+
+  filter:
+    drop-shadow(
+      0 0 7px
+      var(
+        --pacman-color
+      )
+    );
+}
+
+
+.estado-caza {
+  color:
+    #59aaff !important;
+
+  text-shadow:
+    0 0 12px
+    #168cff !important;
+}
+
+
+/* ==========================================================
+   MENSAJE
+========================================================== */
+
+.pacman-mensaje {
+  min-height: 32px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding:
+    5px 12px;
+
+  border:
+    1px solid
+    rgba(
+      255,
+      230,
+      0,
+      0.26
+    );
+
+  border-radius: 9px;
+
+  color:
+    #fff0a1;
+
+  background:
+    rgba(
+      12,
+      9,
+      30,
+      0.92
+    );
+
+  font-size: 10px;
+
+  font-weight: 900;
+
+  letter-spacing: 1px;
+
+  text-align: center;
+
+  text-shadow:
+    0 0 9px
+    rgba(
+      255,
+      230,
+      0,
+      0.45
+    );
+}
+
+
+/* ==========================================================
+   LABERINTO
+========================================================== */
+
+.pacman-tablero {
+  width:
+    min(
+      100%,
+      570px,
+      62dvh
+    );
+
+  aspect-ratio: 1 / 1;
+
+  min-height: 0;
+
+  position: relative;
+
+  justify-self: center;
+
+  align-self: center;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      21,
+      1fr
+    );
+
+  grid-template-rows:
+    repeat(
+      21,
+      1fr
+    );
+
+  gap: 1px;
+
+  padding: 6px;
+
+  overflow: hidden;
+
+  border:
+    2px solid
+    var(
+      --pacman-muro
+    );
+
+  border-radius: 15px;
+
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(
+        40,
+        0,
+        80,
+        0.16
+      ),
+      transparent
+      65%
+    ),
+    var(
+      --pacman-fondo
+    );
+
+  box-shadow:
+    0 0 12px
+    var(
+      --pacman-muro
+    ),
+    0 0 32px
+    color-mix(
+      in srgb,
+      var(
+        --pacman-muro
+      )
+      35%,
+      transparent
+    ),
+    inset
+    0 0 22px
+    rgba(
+      0,
+      0,
+      0,
+      0.8
+    );
+
+  touch-action: none;
+
+  user-select: none;
+
+  -webkit-user-select: none;
+}
+
+
+.pacman-celda {
+  position: relative;
+
+  min-width: 0;
+
+  min-height: 0;
+}
+
+
+.pacman-pasillo {
+  background:
+    rgba(
+      0,
+      3,
+      12,
+      0.64
+    );
+}
+
+
+/* ==========================================================
+   MUROS FLUORESCENTES
+========================================================== */
+
+.pacman-muro {
+  border-radius: 4px;
+
+  background:
+    linear-gradient(
+      145deg,
+      color-mix(
+        in srgb,
+        var(
+          --pacman-muro
+        )
+        72%,
+        #ffffff
+      ),
+      var(
+        --pacman-muro
+      )
+    );
+
+  border:
+    1px solid
+    color-mix(
+      in srgb,
+      var(
+        --pacman-muro
+      )
+      65%,
+      #9effff
+    );
+
+  box-shadow:
+    inset
+    0 0 5px
+    rgba(
+      255,
+      255,
+      255,
+      0.16
+    ),
+    0 0 5px
+    var(
+      --pacman-muro
+    );
+}
+
+
+/* ==========================================================
+   PUNTITOS
+========================================================== */
+
+.pacman-punto {
+  position: absolute;
+
+  left: 50%;
+
+  top: 50%;
+
+  width: 5px;
+
+  height: 5px;
+
+  transform:
+    translate(
+      -50%,
+      -50%
+    );
+
+  border-radius: 50%;
+
+  background:
+    var(
+      --pacman-punto
+    );
+
+  box-shadow:
+    0 0 5px
+    var(
+      --pacman-punto
+    ),
+    0 0 11px
+    var(
+      --pacman-punto
+    );
+
+  animation:
+    puntoPacman
+    1.4s ease-in-out
+    infinite alternate;
+}
+
+
+@keyframes puntoPacman {
+  from {
+    opacity: 0.72;
+
+    transform:
+      translate(
+        -50%,
+        -50%
+      )
+      scale(0.85);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translate(
+        -50%,
+        -50%
+      )
+      scale(1.15);
+  }
+}
+
+
+/* ==========================================================
+   PAC-MAN
+========================================================== */
+
+.pacman-personaje {
+  position: absolute;
+
+  inset: 6%;
+
+  z-index: 6;
+
+  border-radius: 50%;
+
+  background:
+    conic-gradient(
+      from 35deg,
+      transparent
+      0deg 56deg,
+      var(
+        --pacman-color
+      )
+      56deg 360deg
+    );
+
+  filter:
+    drop-shadow(
+      0 0 6px
+      var(
+        --pacman-color
+      )
+    )
+    drop-shadow(
+      0 0 11px
+      var(
+        --pacman-color
+      )
+    );
+
+  transition:
+    transform
+    0.06s linear;
+}
+
+
+.pacman-personaje::after {
+  content: "";
+
+  position: absolute;
+
+  width: 10%;
+
+  height: 10%;
+
+  right: 27%;
+
+  top: 19%;
+
+  border-radius: 50%;
+
+  background:
+    #171000;
+}
+
+
+/* ==========================================================
+   FANTASMAS
+========================================================== */
+
+.pacman-fantasma {
+  position: absolute;
+
+  inset:
+    5% 8% 4%;
+
+  z-index: 5;
+
+  border-radius:
+    50%
+    50%
+    14%
+    14%;
+
+  background:
+    var(
+      --fantasma-color
+    );
+
+  clip-path:
+    polygon(
+      0 38%,
+      8% 18%,
+      24% 5%,
+      50% 0,
+      76% 5%,
+      92% 18%,
+      100% 38%,
+      100% 100%,
+      82% 84%,
+      65% 100%,
+      50% 84%,
+      34% 100%,
+      17% 84%,
+      0 100%
+    );
+
+  filter:
+    drop-shadow(
+      0 0 5px
+      var(
+        --fantasma-color
+      )
+    )
+    drop-shadow(
+      0 0 9px
+      var(
+        --fantasma-color
+      )
+    );
+
+  transition:
+    transform
+    0.08s linear;
+}
+
+
+.fantasma-ojos {
+  position: absolute;
+
+  top: 31%;
+
+  left: 18%;
+
+  right: 18%;
+
+  display: flex;
+
+  justify-content:
+    space-between;
+}
+
+
+.fantasma-ojos i {
+  width: 28%;
+
+  aspect-ratio: 1;
+
+  position: relative;
+
+  display: block;
+
+  border-radius: 50%;
+
+  background:
+    #ffffff;
+}
+
+
+.fantasma-ojos i::after {
+  content: "";
+
+  position: absolute;
+
+  width: 43%;
+
+  height: 43%;
+
+  right: 4%;
+
+  top: 30%;
+
+  border-radius: 50%;
+
+  background:
+    #193dff;
+}
+
+
+.fantasma-asustado {
+  animation:
+    fantasmaAsustado
+    0.55s ease-in-out
+    infinite alternate;
+}
+
+
+@keyframes fantasmaAsustado {
+  from {
+    filter:
+      drop-shadow(
+        0 0 6px
+        var(
+          --pacman-asustado
+        )
+      );
+  }
+
+  to {
+    filter:
+      drop-shadow(
+        0 0 15px
+        var(
+          --pacman-asustado
+        )
+      )
+      brightness(1.3);
+  }
+}
+
+
+/* ==========================================================
+   FRUTA
+========================================================== */
+
+.pacman-fruta {
+  position: absolute;
+
+  inset: -5%;
+
+  z-index: 7;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  color:
+    var(
+      --pacman-fruta
+    );
+
+  font-size:
+    clamp(
+      13px,
+      1.7vw,
+      22px
+    );
+
+  filter:
+    drop-shadow(
+      0 0 5px
+      var(
+        --pacman-fruta
+      )
+    )
+    drop-shadow(
+      0 0 10px
+      var(
+        --pacman-fruta
+      )
+    );
+
+  animation:
+    frutaPacman
+    0.65s ease-in-out
+    infinite alternate;
+}
+
+
+@keyframes frutaPacman {
+  from {
+    transform:
+      scale(0.9);
+  }
+
+  to {
+    transform:
+      scale(1.18);
+  }
+}
+
+
+/* ==========================================================
+   OVERLAYS
+========================================================== */
+
+.pacman-overlay {
+  position: absolute;
+
+  inset: 0;
+
+  z-index: 50;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 10px;
+
+  padding: 20px;
+
+  background:
+    rgba(
+      0,
+      0,
+      8,
+      0.77
+    );
+
+  backdrop-filter:
+    blur(3px);
+
+  text-align: center;
+}
+
+
+.pacman-logo-grande {
+  display: flex;
+
+  align-items: center;
+
+  gap: 15px;
+}
+
+
+.pacman-logo-personaje {
+  width: 48px;
+
+  height: 48px;
+
+  border-radius: 50%;
+
+  background:
+    conic-gradient(
+      from 35deg,
+      transparent
+      0deg 56deg,
+      var(
+        --pacman-color
+      )
+      56deg 360deg
+    );
+
+  filter:
+    drop-shadow(
+      0 0 16px
+      var(
+        --pacman-color
+      )
+    );
+}
+
+
+.pacman-logo-grande strong {
+  color:
+    #ffe600;
+
+  font-size:
+    clamp(
+      29px,
+      5vw,
+      50px
+    );
+
+  letter-spacing: 4px;
+
+  text-shadow:
+    0 0 18px
+    rgba(
+      255,
+      230,
+      0,
+      0.72
+    );
+}
+
+
+.pacman-overlay p {
+  margin: 0;
+
+  color:
+    #ffffff;
+
+  font-size: 14px;
+
+  font-weight: 800;
+}
+
+
+.pacman-ayuda-overlay {
+  margin-top: 8px;
+
+  display: flex;
+
+  flex-wrap: wrap;
+
+  justify-content: center;
+
+  gap: 7px;
+}
+
+
+.pacman-ayuda-overlay span {
+  padding:
+    7px 10px;
+
+  border:
+    1px solid
+    rgba(
+      0,
+      238,
+      255,
+      0.3
+    );
+
+  border-radius: 999px;
+
+  color:
+    #c6fbff;
+
+  font-size: 9px;
+}
+
+
+.pacman-game-over {
+  color:
+    #ff315f;
+
+  font-size:
+    36px;
+
+  letter-spacing: 4px;
+
+  text-shadow:
+    0 0 20px
+    #ff315f;
+}
+
+
+.pacman-victoria {
+  color:
+    #ffe600;
+
+  font-size:
+    31px;
+
+  letter-spacing: 3px;
+
+  text-shadow:
+    0 0 20px
+    #ffe600;
+}
+
+
+.pacman-overlay button {
+  min-height: 45px;
+
+  margin-top: 8px;
+
+  padding:
+    0 18px;
+
+  border:
+    1px solid
+    #ffe600;
+
+  border-radius: 10px;
+
+  color:
+    #03030a;
+
+  background:
+    #ffe600;
+
+  font-size: 12px;
+
+  font-weight: 1000;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 0 18px
+    rgba(
+      255,
+      230,
+      0,
+      0.48
+    );
+}
+
+
+/* ==========================================================
+   AYUDA
+========================================================== */
+
+.pacman-instrucciones {
+  min-height: 27px;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  flex-wrap: wrap;
+
+  gap: 6px;
+}
+
+
+.pacman-instrucciones span {
+  padding:
+    4px 8px;
+
+  border:
+    1px solid
+    rgba(
+      0,
+      238,
+      255,
+      0.22
+    );
+
+  border-radius: 999px;
+
+  color:
+    #a9efff;
+
+  background:
+    rgba(
+      4,
+      8,
+      18,
+      0.85
+    );
+
+  font-size: 7px;
+
+  font-weight: 800;
+}
+
+
+/* ==========================================================
+   TELÉFONO
+========================================================== */
+
+@media (
+  max-width: 700px
+) {
+  .juego-modal-pacman {
+    width: 100%;
+
+    height: 100dvh;
+
+    max-height: 100dvh;
+
+    padding: 6px;
+
+    border: 0;
+
+    border-radius: 0;
+  }
+
+
+  .juego-modal-pacman
+  .barra-juego {
+    min-height: 52px;
+
+    margin-bottom: 3px;
+  }
+
+
+  .juego-modal-pacman
+  .barra-juego-identidad h2 {
+    font-size: 20px;
+  }
+
+
+  .juego-modal-pacman
+  .lienzo-juego-contenedor {
+    padding: 2px;
+  }
+
+
+  .pacman-juego {
+    gap: 4px;
+  }
+
+
+  .pacman-hud {
+    grid-template-columns:
+      repeat(
+        5,
+        1fr
+      );
+
+    gap: 3px;
+  }
+
+
+  .pacman-panel {
+    min-height: 43px;
+
+    padding: 4px;
+  }
+
+
+  .pacman-panel span {
+    font-size: 5px;
+
+    letter-spacing: 0.5px;
+  }
+
+
+  .pacman-panel strong {
+    font-size: 10px;
+  }
+
+
+  .pacman-mini {
+    width: 12px;
+
+    height: 12px;
+  }
+
+
+  .pacman-mensaje {
+    min-height: 25px;
+
+    padding:
+      3px 6px;
+
+    font-size: 7px;
+  }
+
+
+  .pacman-tablero {
+    width:
+      min(
+        98vw,
+        58dvh
+      );
+
+    padding: 4px;
+
+    gap: 1px;
+
+    border-radius: 9px;
+  }
+
+
+  .pacman-punto {
+    width: 3px;
+
+    height: 3px;
+  }
+
+
+  .pacman-instrucciones {
+    display: none;
+  }
+
+
+  .pacman-logo-personaje {
+    width: 34px;
+
+    height: 34px;
+  }
+
+
+  .pacman-overlay p {
+    font-size: 11px;
+  }
+}
+
+
+/* ==========================================================
+   PANTALLAS BAJAS
+========================================================== */
+
+@media (
+  max-height: 650px
+) {
+  .pacman-tablero {
+    width:
+      min(
+        100%,
+        52dvh
+      );
+  }
+
+
+  .pacman-instrucciones {
+    display: none;
+  }
+
+
+  .pacman-mensaje {
+    min-height: 23px;
+  }
+}
