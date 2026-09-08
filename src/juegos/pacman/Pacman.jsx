@@ -6,13 +6,15 @@ import {
   useState,
 } from "react";
 
-
 import {
   NIVELES_PACMAN,
 } from "../../datos/configuracionJuegos";
 
 
 const TAMANO = 21;
+
+const VENTAJA_FANTASMAS_MS =
+  5000;
 
 
 const DIRECCIONES = {
@@ -90,6 +92,7 @@ function crearAleatorio(
           (
             t >>> 15
           ),
+
         t | 1
       );
 
@@ -101,6 +104,7 @@ function crearAleatorio(
           (
             t >>> 7
           ),
+
         t | 61
       );
 
@@ -139,9 +143,9 @@ function mezclar(
     const j =
       Math.floor(
         aleatorio() *
-        (
-          i + 1
-        )
+          (
+            i + 1
+          )
       );
 
 
@@ -182,8 +186,8 @@ function generarLaberinto(
   const aleatorio =
     crearAleatorio(
       1511 +
-      nivel *
-        7919
+        nivel *
+          7919
     );
 
 
@@ -279,10 +283,10 @@ function generarLaberinto(
 
       laberinto[
         actual.y +
-        direccion.y / 2
+          direccion.y / 2
       ][
         actual.x +
-        direccion.x / 2
+          direccion.x / 2
       ] =
         0;
 
@@ -324,14 +328,14 @@ function generarLaberinto(
   ==========================================================
   CONEXIONES EXTRA
 
-  Los primeros niveles tienen más salidas.
-  En los últimos se parece más a un laberinto real.
+  Conforme aumentan los niveles,
+  el laberinto conserva menos
+  caminos sencillos.
   ==========================================================
   */
 
   let conexiones =
     0;
-
 
   let intentos =
     0;
@@ -349,9 +353,9 @@ function generarLaberinto(
       1 +
       Math.floor(
         aleatorio() *
-        (
-          TAMANO - 2
-        )
+          (
+            TAMANO - 2
+          )
       );
 
 
@@ -359,9 +363,9 @@ function generarLaberinto(
       1 +
       Math.floor(
         aleatorio() *
-        (
-          TAMANO - 2
-        )
+          (
+            TAMANO - 2
+          )
       );
 
 
@@ -394,7 +398,6 @@ function generarLaberinto(
       laberinto[y][x] =
         0;
 
-
       conexiones += 1;
     }
   }
@@ -412,10 +415,8 @@ function esTransitable(
   return (
     x >= 0 &&
     y >= 0 &&
-    x <
-      TAMANO &&
-    y <
-      TAMANO &&
+    x < TAMANO &&
+    y < TAMANO &&
     laberinto[y][x] ===
       0
   );
@@ -486,22 +487,22 @@ function obtenerCasaFantasmas(
       const distanciaPrimero =
         Math.abs(
           primero.x -
-          centro.x
+            centro.x
         ) +
         Math.abs(
           primero.y -
-          centro.y
+            centro.y
         );
 
 
       const distanciaSegundo =
         Math.abs(
           segundo.x -
-          centro.x
+            centro.x
         ) +
         Math.abs(
           segundo.y -
-          centro.y
+            centro.y
         );
 
 
@@ -675,7 +676,7 @@ function crearFantasmas(
       color:
         COLORES_FANTASMAS[
           indice %
-          COLORES_FANTASMAS.length
+            COLORES_FANTASMAS.length
         ],
     })
   );
@@ -752,6 +753,7 @@ function crearEstadoNivel(
     totalPellets:
       pellets.size,
 
+
     pacman: {
       x: 1,
       y: 1,
@@ -763,7 +765,25 @@ function crearEstadoNivel(
         "derecha",
     },
 
+
     fantasmas,
+
+
+    /*
+    ========================================================
+    VENTAJA DE 5 SEGUNDOS
+
+    El contador solamente disminuye
+    mientras la partida está activa.
+
+    Los fantasmas permanecen visibles,
+    pero completamente inmóviles.
+    ========================================================
+    */
+
+    ventajaFantasmasMs:
+      VENTAJA_FANTASMAS_MS,
+
 
     fruta: null,
 
@@ -771,13 +791,20 @@ function crearEstadoNivel(
 
     poderHasta: 0,
 
+
     invulnerableHasta:
       Date.now() +
-      1600,
+      1200,
+
+
+    /*
+    Pac-Man ya no permanece bloqueado
+    al iniciar el nivel.
+    */
 
     bloqueadoHasta:
-      Date.now() +
-      900,
+      0,
+
 
     tick: 0,
 
@@ -785,10 +812,9 @@ function crearEstadoNivel(
 
     victoria: false,
 
+
     mensaje:
-      nivel === 1
-        ? "COME TODOS LOS PUNTOS"
-        : `NIVEL ${nivel}`,
+      "PREPÁRATE",
   };
 }
 
@@ -962,22 +988,22 @@ function direccionFantasma(
         const distanciaA =
           Math.abs(
             a.x -
-            pacman.x
+              pacman.x
           ) +
           Math.abs(
             a.y -
-            pacman.y
+              pacman.y
           );
 
 
         const distanciaB =
           Math.abs(
             b.x -
-            pacman.x
+              pacman.x
           ) +
           Math.abs(
             b.y -
-            pacman.y
+              pacman.y
           );
 
 
@@ -1034,8 +1060,7 @@ function encontrarFruta(
   pellets,
   pacman
 ) {
-  const candidatos =
-    [];
+  const candidatos = [];
 
 
   for (
@@ -1062,11 +1087,11 @@ function encontrarFruta(
       distancia:
         Math.abs(
           posicion.x -
-          pacman.x
+            pacman.x
         ) +
         Math.abs(
           posicion.y -
-          pacman.y
+            pacman.y
         ),
     });
   }
@@ -1155,6 +1180,7 @@ function Pacman({
             NIVELES_PACMAN.length
           ) - 1
         ],
+
       [
         estado.nivel,
       ]
@@ -1206,6 +1232,12 @@ function Pacman({
   };
 
 
+  /*
+  ==========================================================
+  CAMBIAR DIRECCIÓN
+  ==========================================================
+  */
+
   const cambiarDireccion =
     useCallback(
       (
@@ -1235,13 +1267,14 @@ function Pacman({
           })
         );
       },
+
       []
     );
 
 
   /*
   ==========================================================
-  CONTROLES DE JUEGOMODAL
+  CONTROLES DESDE JUEGOMODAL
   ==========================================================
   */
 
@@ -1300,6 +1333,9 @@ function Pacman({
   /*
   ==========================================================
   MOVIMIENTO TOUCH
+
+  En teléfono el usuario desliza
+  directamente sobre el laberinto.
   ==========================================================
   */
 
@@ -1365,7 +1401,6 @@ function Pacman({
             : "izquierda"
         );
 
-
         return;
       }
 
@@ -1381,6 +1416,11 @@ function Pacman({
   /*
   ==========================================================
   REINICIAR PARTIDA
+
+  Siempre vuelve a:
+  nivel 1
+  4 vidas
+  5 segundos de ventaja
   ==========================================================
   */
 
@@ -1402,7 +1442,7 @@ function Pacman({
 
   /*
   ==========================================================
-  CICLO DEL JUEGO
+  CICLO PRINCIPAL
   ==========================================================
   */
 
@@ -1435,9 +1475,16 @@ function Pacman({
                 Date.now();
 
 
+              /*
+              Este bloqueo se conserva
+              por compatibilidad, pero
+              normalmente vale 0.
+              */
+
               if (
                 ahora <
-                anterior.bloqueadoHasta
+                anterior
+                  .bloqueadoHasta
               ) {
                 return {
                   ...anterior,
@@ -1449,8 +1496,33 @@ function Pacman({
               }
 
 
+              /*
+              ==================================================
+              COPIA DEL ESTADO
+
+              El contador disminuye únicamente cuando
+              este intervalo está ejecutándose.
+
+              Si el usuario pausa el juego,
+              los 5 segundos también se pausan.
+              ==================================================
+              */
+
               const siguiente = {
                 ...anterior,
+
+                ventajaFantasmasMs:
+                  Math.max(
+                    0,
+
+                    (
+                      anterior
+                        .ventajaFantasmasMs ??
+                      0
+                    ) -
+                      parametros
+                        .velocidad
+                  ),
 
                 pellets:
                   new Set(
@@ -1462,13 +1534,15 @@ function Pacman({
                 },
 
                 fantasmas:
-                  anterior.fantasmas.map(
-                    (
-                      fantasma
-                    ) => ({
-                      ...fantasma,
-                    })
-                  ),
+                  anterior
+                    .fantasmas
+                    .map(
+                      (
+                        fantasma
+                      ) => ({
+                        ...fantasma,
+                      })
+                    ),
 
                 tick:
                   anterior.tick +
@@ -1476,19 +1550,34 @@ function Pacman({
               };
 
 
+              /*
+              Mientras sea mayor a cero:
+              - fantasmas quietos
+              - no pueden matar
+              - Pac-Man sí se mueve
+              */
+
+              const fantasmasEnEspera =
+                siguiente
+                  .ventajaFantasmasMs >
+                0;
+
+
               const pacmanAnterior = {
                 x:
-                  anterior.pacman.x,
+                  anterior
+                    .pacman.x,
 
                 y:
-                  anterior.pacman.y,
+                  anterior
+                    .pacman.y,
               };
 
 
               /*
-              ================================================
+              ==================================================
               PAC-MAN
-              ================================================
+              ==================================================
               */
 
               const deseada =
@@ -1558,9 +1647,9 @@ function Pacman({
 
 
               /*
-              ================================================
+              ==================================================
               PUNTITOS
-              ================================================
+              ==================================================
               */
 
               const posicionPacman =
@@ -1607,11 +1696,11 @@ function Pacman({
 
 
               /*
-              ================================================
+              ==================================================
               APARECER FRUTA
 
-              Sale dos veces por nivel.
-              ================================================
+              Aparece dos veces por nivel.
+              ==================================================
               */
 
               const comidos =
@@ -1629,6 +1718,7 @@ function Pacman({
                   ? comidos /
                     siguiente
                       .totalPellets
+
                   : 1;
 
 
@@ -1662,9 +1752,9 @@ function Pacman({
 
 
               /*
-              ================================================
+              ==================================================
               COMER FRUTA
-              ================================================
+              ==================================================
               */
 
               if (
@@ -1735,107 +1825,120 @@ function Pacman({
 
 
               /*
-              ================================================
+              ==================================================
               FANTASMAS
-              ================================================
+
+              IMPORTANTE:
+              durante la ventaja de cinco segundos
+              este bloque NO se ejecuta.
+              ==================================================
               */
 
               const posicionesAnteriores =
-                anterior.fantasmas.map(
-                  (
-                    fantasma
-                  ) => ({
-                    x:
-                      fantasma.x,
+                anterior
+                  .fantasmas
+                  .map(
+                    (
+                      fantasma
+                    ) => ({
+                      x:
+                        fantasma.x,
 
-                    y:
-                      fantasma.y,
-                  })
-                );
+                      y:
+                        fantasma.y,
+                    })
+                  );
 
 
               if (
+                !fantasmasEnEspera &&
                 siguiente.tick %
                   parametros
                     .fantasmaCada ===
-                0
+                  0
               ) {
                 siguiente.fantasmas =
-                  siguiente.fantasmas.map(
-                    (
-                      fantasma
-                    ) => {
-                      const direccion =
-                        direccionFantasma(
-                          fantasma,
+                  siguiente
+                    .fantasmas
+                    .map(
+                      (
+                        fantasma
+                      ) => {
+                        const direccion =
+                          direccionFantasma(
+                            fantasma,
 
-                          siguiente
-                            .laberinto,
+                            siguiente
+                              .laberinto,
 
-                          siguiente
-                            .pacman,
+                            siguiente
+                              .pacman,
 
-                          conPoder
-                        );
-
-
-                      const movimiento =
-                        DIRECCIONES[
-                          direccion
-                        ];
+                            conPoder
+                          );
 
 
-                      if (
-                        !movimiento
-                      ) {
-                        return fantasma;
+                        const movimiento =
+                          DIRECCIONES[
+                            direccion
+                          ];
+
+
+                        if (
+                          !movimiento
+                        ) {
+                          return fantasma;
+                        }
+
+
+                        const nuevoX =
+                          fantasma.x +
+                          movimiento.x;
+
+
+                        const nuevoY =
+                          fantasma.y +
+                          movimiento.y;
+
+
+                        if (
+                          !esTransitable(
+                            siguiente
+                              .laberinto,
+
+                            nuevoX,
+
+                            nuevoY
+                          )
+                        ) {
+                          return fantasma;
+                        }
+
+
+                        return {
+                          ...fantasma,
+
+                          x:
+                            nuevoX,
+
+                          y:
+                            nuevoY,
+
+                          direccion,
+                        };
                       }
-
-
-                      const nuevoX =
-                        fantasma.x +
-                        movimiento.x;
-
-
-                      const nuevoY =
-                        fantasma.y +
-                        movimiento.y;
-
-
-                      if (
-                        !esTransitable(
-                          siguiente
-                            .laberinto,
-
-                          nuevoX,
-
-                          nuevoY
-                        )
-                      ) {
-                        return fantasma;
-                      }
-
-
-                      return {
-                        ...fantasma,
-
-                        x:
-                          nuevoX,
-
-                        y:
-                          nuevoY,
-
-                        direccion,
-                      };
-                    }
-                  );
+                    );
               }
 
 
               /*
-              ================================================
+              ==================================================
               COLISIONES
-              ================================================
+
+              Durante los cinco segundos
+              las colisiones con fantasmas
+              quedan desactivadas.
+              ==================================================
               */
 
               let perdioVida =
@@ -1843,89 +1946,115 @@ function Pacman({
 
 
               siguiente.fantasmas =
-                siguiente.fantasmas.map(
-                  (
-                    fantasma,
-                    indice
-                  ) => {
-                    const colisionDirecta =
-                      colisionMismaCelda(
-                        fantasma,
+                siguiente
+                  .fantasmas
+                  .map(
+                    (
+                      fantasma,
+                      indice
+                    ) => {
+                      /*
+                      Fantasma visible pero
+                      completamente inofensivo.
+                      */
+
+                      if (
+                        fantasmasEnEspera
+                      ) {
+                        return fantasma;
+                      }
+
+
+                      const colisionDirecta =
+                        colisionMismaCelda(
+                          fantasma,
+
+                          siguiente
+                            .pacman
+                        );
+
+
+                      const cruce =
+                        posicionesAnteriores[
+                          indice
+                        ] &&
+                        posicionesAnteriores[
+                          indice
+                        ].x ===
+                          siguiente
+                            .pacman.x &&
+                        posicionesAnteriores[
+                          indice
+                        ].y ===
+                          siguiente
+                            .pacman.y &&
+                        fantasma.x ===
+                          pacmanAnterior.x &&
+                        fantasma.y ===
+                          pacmanAnterior.y;
+
+
+                      if (
+                        !colisionDirecta &&
+                        !cruce
+                      ) {
+                        return fantasma;
+                      }
+
+
+                      /*
+                      Pac-Man tiene poder:
+                      se come al fantasma.
+                      */
+
+                      if (
+                        conPoder
+                      ) {
+                        siguiente.puntos +=
+                          200;
+
+
+                        siguiente.mensaje =
+                          "FANTASMA COMIDO +200";
+
+
+                        return {
+                          ...fantasma,
+
+                          x:
+                            fantasma
+                              .casaX,
+
+                          y:
+                            fantasma
+                              .casaY,
+                        };
+                      }
+
+
+                      if (
+                        ahora <
                         siguiente
-                          .pacman
-                      );
+                          .invulnerableHasta
+                      ) {
+                        return fantasma;
+                      }
 
 
-                    const cruce =
-                      posicionesAnteriores[
-                        indice
-                      ] &&
-                      posicionesAnteriores[
-                        indice
-                      ].x ===
-                        siguiente
-                          .pacman.x &&
-                      posicionesAnteriores[
-                        indice
-                      ].y ===
-                        siguiente
-                          .pacman.y &&
-                      fantasma.x ===
-                        pacmanAnterior.x &&
-                      fantasma.y ===
-                        pacmanAnterior.y;
+                      perdioVida =
+                        true;
 
 
-                    if (
-                      !colisionDirecta &&
-                      !cruce
-                    ) {
                       return fantasma;
                     }
+                  );
 
 
-                    if (
-                      conPoder
-                    ) {
-                      siguiente.puntos +=
-                        200;
-
-
-                      siguiente.mensaje =
-                        "FANTASMA COMIDO +200";
-
-
-                      return {
-                        ...fantasma,
-
-                        x:
-                          fantasma
-                            .casaX,
-
-                        y:
-                          fantasma
-                            .casaY,
-                      };
-                    }
-
-
-                    if (
-                      ahora <
-                      siguiente
-                        .invulnerableHasta
-                    ) {
-                      return fantasma;
-                    }
-
-
-                    perdioVida =
-                      true;
-
-
-                    return fantasma;
-                  }
-                );
-
+              /*
+              ==================================================
+              PAC-MAN PIERDE UNA VIDA
+              ==================================================
+              */
 
               if (
                 perdioVida
@@ -1933,6 +2062,10 @@ function Pacman({
                 siguiente.vidas -=
                   1;
 
+
+                /*
+                GAME OVER
+                */
 
                 if (
                   siguiente.vidas <=
@@ -1958,6 +2091,17 @@ function Pacman({
                   return siguiente;
                 }
 
+
+                /*
+                =================================================
+                REINICIO DESPUÉS DE SER COMIDO
+
+                - Pac-Man vuelve al inicio.
+                - Fantasmas vuelven a su zona.
+                - Pac-Man puede moverse inmediatamente.
+                - Fantasmas esperan otros cinco segundos.
+                =================================================
+                */
 
                 const nuevosFantasmas =
                   crearFantasmas(
@@ -1989,18 +2133,29 @@ function Pacman({
                   0;
 
 
-                siguiente.invulnerableHasta =
+                siguiente
+                  .invulnerableHasta =
                   ahora +
-                  1800;
+                  1200;
 
 
-                siguiente.bloqueadoHasta =
-                  ahora +
-                  650;
+                siguiente
+                  .bloqueadoHasta =
+                  0;
+
+
+                /*
+                AQUÍ REINICIAN LOS
+                CINCO SEGUNDOS.
+                */
+
+                siguiente
+                  .ventajaFantasmasMs =
+                  VENTAJA_FANTASMAS_MS;
 
 
                 siguiente.mensaje =
-                  `VIDAS: ${siguiente.vidas}`;
+                  "PREPÁRATE";
 
 
                 return siguiente;
@@ -2008,9 +2163,9 @@ function Pacman({
 
 
               /*
-              ================================================
+              ==================================================
               NIVEL COMPLETADO
-              ================================================
+              ==================================================
               */
 
               if (
@@ -2041,6 +2196,10 @@ function Pacman({
                 );
 
 
+                /*
+                Último nivel.
+                */
+
                 if (
                   siguiente.nivel >=
                   NIVELES_PACMAN.length
@@ -2069,7 +2228,14 @@ function Pacman({
 
 
                 /*
-                +1 VIDA POR NIVEL
+                =================================================
+                SIGUIENTE NIVEL
+
+                +1 vida.
+
+                crearEstadoNivel vuelve automáticamente
+                a colocar 5 segundos de ventaja.
+                =================================================
                 */
 
                 return crearEstadoNivel(
@@ -2108,6 +2274,12 @@ function Pacman({
   ]);
 
 
+  /*
+  ==========================================================
+  PODER DE LA FRUTA
+  ==========================================================
+  */
+
   const conPoder =
     Date.now() <
     estado.poderHasta;
@@ -2122,8 +2294,40 @@ function Pacman({
           ) /
             1000
         )
+
       : 0;
 
+
+  /*
+  ==========================================================
+  CONTADOR DE VENTAJA
+
+  5 → 4 → 3 → 2 → 1
+  ==========================================================
+  */
+
+  const segundosVentaja =
+    Math.ceil(
+      (
+        estado
+          .ventajaFantasmasMs ??
+        0
+      ) /
+        1000
+    );
+
+
+  const fantasmasEnEspera =
+    segundosVentaja > 0 &&
+    !estado.gameOver &&
+    !estado.victoria;
+
+
+  /*
+  ==========================================================
+  INTERFAZ
+  ==========================================================
+  */
 
   return (
     <div className="pacman-juego">
@@ -2210,9 +2414,15 @@ function Pacman({
                 : ""
             }
           >
-            {conPoder
-              ? `CAZA ${segundosPoder}s`
-              : "NORMAL"}
+
+            {fantasmasEnEspera
+              ? `VENTAJA ${segundosVentaja}s`
+
+              : conPoder
+                ? `CAZA ${segundosPoder}s`
+
+                : "NORMAL"}
+
           </strong>
 
         </div>
@@ -2221,14 +2431,18 @@ function Pacman({
 
 
       {/* =====================================================
-          MENSAJE
+          MENSAJE SUPERIOR
       ====================================================== */}
 
       <div className="pacman-mensaje">
 
-        {conPoder
-          ? "🍒 ¡AHORA PUEDES COMERTE A LOS FANTASMAS!"
-          : estado.mensaje}
+        {fantasmasEnEspera
+          ? `PREPÁRATE · FANTASMAS EN ${segundosVentaja}s`
+
+          : conPoder
+            ? "🍒 ¡AHORA PUEDES COMERTE A LOS FANTASMAS!"
+
+            : estado.mensaje}
 
       </div>
 
@@ -2299,22 +2513,26 @@ function Pacman({
 
 
                 const fantasma =
-                  estado.fantasmas.find(
-                    (
-                      elemento
-                    ) =>
-                      elemento.x ===
-                        x &&
-                      elemento.y ===
-                        y
-                  );
+                  estado
+                    .fantasmas
+                    .find(
+                      (
+                        elemento
+                      ) =>
+                        elemento.x ===
+                          x &&
+                        elemento.y ===
+                          y
+                    );
 
 
                 const esFruta =
                   estado.fruta &&
-                  estado.fruta.x ===
+                  estado
+                    .fruta.x ===
                     x &&
-                  estado.fruta.y ===
+                  estado
+                    .fruta.y ===
                     y;
 
 
@@ -2364,6 +2582,7 @@ function Pacman({
                           "--fantasma-color":
                             conPoder
                               ? colores.asustado
+
                               : fantasma.color ||
                                 colores.fantasma,
                         }}
@@ -2408,7 +2627,9 @@ function Pacman({
         )}
 
 
-        {/* PAUSA */}
+        {/* ===================================================
+            PAUSA / INICIO
+        ==================================================== */}
 
         {pausado &&
           !estado.gameOver &&
@@ -2434,7 +2655,7 @@ function Pacman({
 
 
             <p>
-              Pulsa ▶ para comenzar
+              Toca la pantalla o pulsa ▶ para comenzar
             </p>
 
 
@@ -2449,6 +2670,10 @@ function Pacman({
               </span>
 
               <span>
+                5 segundos de ventaja
+              </span>
+
+              <span>
                 🍒 Fruta = comer fantasmas
               </span>
 
@@ -2459,7 +2684,9 @@ function Pacman({
         )}
 
 
-        {/* GAME OVER */}
+        {/* ===================================================
+            GAME OVER
+        ==================================================== */}
 
         {estado.gameOver && (
 
@@ -2498,7 +2725,9 @@ function Pacman({
         )}
 
 
-        {/* VICTORIA */}
+        {/* ===================================================
+            VICTORIA
+        ==================================================== */}
 
         {estado.victoria && (
 
@@ -2532,6 +2761,10 @@ function Pacman({
       </div>
 
 
+      {/* =====================================================
+          INSTRUCCIONES
+      ====================================================== */}
+
       <div className="pacman-instrucciones">
 
         <span>
@@ -2540,6 +2773,10 @@ function Pacman({
 
         <span>
           Móvil: deslizar
+        </span>
+
+        <span>
+          5 s antes de que salgan los fantasmas
         </span>
 
         <span>

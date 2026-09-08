@@ -24,31 +24,39 @@ function BotonControl({
   children,
   clase = "",
   onComenzar,
+  ariaLabel,
 }) {
-  const activar =
-    (evento) => {
-      evento.preventDefault();
+  const activar = (
+    evento
+  ) => {
+    evento.preventDefault();
 
-      onComenzar?.();
-
-      enviarControl(
-        juego,
-        accion,
-        true
+    evento.currentTarget
+      .setPointerCapture?.(
+        evento.pointerId
       );
-    };
+
+    onComenzar?.();
+
+    enviarControl(
+      juego,
+      accion,
+      true
+    );
+  };
 
 
-  const desactivar =
-    (evento) => {
-      evento.preventDefault();
+  const desactivar = (
+    evento
+  ) => {
+    evento.preventDefault();
 
-      enviarControl(
-        juego,
-        accion,
-        false
-      );
-    };
+    enviarControl(
+      juego,
+      accion,
+      false
+    );
+  };
 
 
   return (
@@ -56,6 +64,9 @@ function BotonControl({
       type="button"
       className={
         `control-touch-boton ${clase}`
+      }
+      aria-label={
+        ariaLabel
       }
       onPointerDown={
         activar
@@ -66,8 +77,12 @@ function BotonControl({
       onPointerCancel={
         desactivar
       }
-      onPointerLeave={
+      onLostPointerCapture={
         desactivar
+      }
+      onContextMenu={
+        (evento) =>
+          evento.preventDefault()
       }
     >
       {children}
@@ -81,12 +96,25 @@ function ControlesTouch({
   onComenzar,
 }) {
   /*
-  Tetris y Pac-Man se controlan
-  directamente sobre el tablero.
+  ==========================================================
+  TETRIS
+  ==========================================================
   */
 
   if (
-    juego === "tetris" ||
+    juego === "tetris"
+  ) {
+    return null;
+  }
+
+
+  /*
+  ==========================================================
+  PAC-MAN
+  ==========================================================
+  */
+
+  if (
     juego === "pacman"
   ) {
     return null;
@@ -94,8 +122,9 @@ function ControlesTouch({
 
 
   /*
-  Flappy se controla tocando
-  directamente el juego.
+  ==========================================================
+  FLAPPY
+  ==========================================================
   */
 
   if (
@@ -106,56 +135,135 @@ function ControlesTouch({
 
 
   /*
+  ==========================================================
   ASTEROIDES
+  ==========================================================
 
-  Izquierda:
-  barra de dirección.
+            ▲
 
-  Derecha:
-  propulsor y disparo separados.
+  PROPULSOR ◀ ● ▶ DISPARAR
+
+            ▼
+
+  La cruceta únicamente orienta
+  la nave.
+
+  El propulsor es independiente.
+
+  El disparo es independiente.
+  ==========================================================
   */
 
   if (
     juego === "asteroids"
   ) {
     return (
-      <div className="controles-touch controles-asteroids-nuevos">
+      <div
+        className="
+          controles-touch
+          controles-asteroids-pad
+        "
+      >
 
-        <div className="asteroids-direccion">
+        {/* ===============================================
+            PROPULSOR
+        =============================================== */}
 
-          <span className="asteroids-control-titulo">
-            GIRO
+        <div className="asteroids-zona-accion asteroids-zona-propulsor">
+
+          <BotonControl
+            juego="asteroids"
+            accion="propulsar"
+            clase="asteroids-boton-accion asteroids-propulsor"
+            onComenzar={
+              onComenzar
+            }
+            ariaLabel="Propulsor"
+          >
+
+            <span className="asteroids-icono-propulsor">
+              ▲
+            </span>
+
+            <strong>
+              PROPULSOR
+            </strong>
+
+          </BotonControl>
+
+        </div>
+
+
+        {/* ===============================================
+            CRUCETA CENTRAL
+        =============================================== */}
+
+        <div className="asteroids-mando-central">
+
+          <span className="asteroids-mando-titulo">
+            DIRECCIÓN
           </span>
 
 
-          <div className="asteroids-barra-giro">
+          <div className="asteroids-cruceta">
 
             <BotonControl
               juego="asteroids"
-              accion="izquierda"
-              clase="asteroids-giro-izquierda"
+              accion="apuntar_arriba"
+              clase="asteroids-direccion asteroids-arriba"
               onComenzar={
                 onComenzar
               }
+              ariaLabel="Apuntar arriba"
+            >
+              ▲
+            </BotonControl>
+
+
+            <BotonControl
+              juego="asteroids"
+              accion="apuntar_izquierda"
+              clase="asteroids-direccion asteroids-izquierda"
+              onComenzar={
+                onComenzar
+              }
+              ariaLabel="Apuntar izquierda"
             >
               ◀
             </BotonControl>
 
 
-            <div className="asteroids-barra-centro">
-              ◇
+            <div
+              className="asteroids-centro-mando"
+              aria-hidden="true"
+            >
+              ●
             </div>
 
 
             <BotonControl
               juego="asteroids"
-              accion="derecha"
-              clase="asteroids-giro-derecha"
+              accion="apuntar_derecha"
+              clase="asteroids-direccion asteroids-derecha"
               onComenzar={
                 onComenzar
               }
+              ariaLabel="Apuntar derecha"
             >
               ▶
+            </BotonControl>
+
+
+            <BotonControl
+              juego="asteroids"
+              accion="apuntar_abajo"
+              clase="asteroids-direccion asteroids-abajo"
+              onComenzar={
+                onComenzar
+              }
+              ariaLabel="Apuntar abajo"
+            >
+              ▼
             </BotonControl>
 
           </div>
@@ -163,41 +271,30 @@ function ControlesTouch({
         </div>
 
 
-        <div className="asteroids-acciones">
+        {/* ===============================================
+            DISPARO
+        =============================================== */}
 
-          <BotonControl
-            juego="asteroids"
-            accion="arriba"
-            clase="asteroids-propulsor"
-            onComenzar={
-              onComenzar
-            }
-          >
-            <span>
-              ▲
-            </span>
-
-            <strong>
-              PROPULSOR
-            </strong>
-          </BotonControl>
-
+        <div className="asteroids-zona-accion asteroids-zona-disparo">
 
           <BotonControl
             juego="asteroids"
             accion="disparar"
-            clase="asteroids-disparo"
+            clase="asteroids-boton-accion asteroids-disparo"
             onComenzar={
               onComenzar
             }
+            ariaLabel="Disparar"
           >
-            <span>
+
+            <span className="asteroids-icono-disparo">
               ●
             </span>
 
             <strong>
               DISPARAR
             </strong>
+
           </BotonControl>
 
         </div>

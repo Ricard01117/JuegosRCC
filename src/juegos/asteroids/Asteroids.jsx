@@ -30,6 +30,30 @@ import {
 const MAXIMO_DISPAROS = 7;
 
 
+/*
+==========================================================
+ORIENTACIÓN TÁCTIL
+
+La punta de la nave está dibujada
+mirando hacia el eje X positivo.
+==========================================================
+*/
+
+const ANGULOS_TACTILES = {
+  apuntar_derecha:
+    0,
+
+  apuntar_abajo:
+    Math.PI / 2,
+
+  apuntar_izquierda:
+    Math.PI,
+
+  apuntar_arriba:
+    -Math.PI / 2,
+};
+
+
 function Asteroids({
   pausado,
   configuracion,
@@ -37,53 +61,41 @@ function Asteroids({
   const canvasRef =
     useRef(null);
 
-
   const frameRef =
     useRef(null);
-
 
   const ultimoTiempoRef =
     useRef(
       performance.now()
     );
 
-
   const naveRef =
     useRef(
       crearNave()
     );
 
-
   const asteroidesRef =
     useRef([]);
-
 
   const disparosRef =
     useRef([]);
 
-
   const controlesRef =
     useRef({
       izquierda: false,
-
       derecha: false,
-
       arriba: false,
     });
-
 
   const ultimoDisparoRef =
     useRef(0);
 
-
   const cambiandoNivelRef =
     useRef(false);
-
 
   const estadoRef =
     useRef({
       pausado,
-
       gameOver: false,
     });
 
@@ -124,6 +136,12 @@ function Asteroids({
   ] = useState(null);
 
 
+  /*
+  ==========================================================
+  DIFICULTAD
+  ==========================================================
+  */
+
   const dificultad =
     useMemo(
       () =>
@@ -143,8 +161,15 @@ function Asteroids({
     );
 
 
+  /*
+  ==========================================================
+  SINCRONIZAR PAUSA
+  ==========================================================
+  */
+
   useEffect(() => {
-    estadoRef.current.pausado =
+    estadoRef.current
+      .pausado =
       pausado;
   }, [
     pausado,
@@ -152,7 +177,8 @@ function Asteroids({
 
 
   useEffect(() => {
-    estadoRef.current.gameOver =
+    estadoRef.current
+      .gameOver =
       gameOver;
   }, [
     gameOver,
@@ -160,9 +186,9 @@ function Asteroids({
 
 
   /*
-  ==========================================
+  ==========================================================
   CREAR NIVEL
-  ==========================================
+  ==========================================================
   */
 
   const cargarNivel =
@@ -205,6 +231,13 @@ function Asteroids({
           crearNave();
 
 
+        controlesRef.current = {
+          izquierda: false,
+          derecha: false,
+          arriba: false,
+        };
+
+
         setAsteroidesRestantes(
           nuevaOleada.length
         );
@@ -219,23 +252,14 @@ function Asteroids({
           false;
 
 
-        const temporizador =
-          window.setTimeout(
-            () => {
-              setAvisoNivel(
-                null
-              );
-            },
-
-            1400
-          );
-
-
-        return () => {
-          window.clearTimeout(
-            temporizador
-          );
-        };
+        window.setTimeout(
+          () => {
+            setAvisoNivel(
+              null
+            );
+          },
+          1400
+        );
       },
 
       [
@@ -245,34 +269,24 @@ function Asteroids({
 
 
   /*
-  ==========================================
+  ==========================================================
   REINICIAR
-  ==========================================
+  ==========================================================
   */
 
   const reiniciar =
     useCallback(() => {
-      setPuntos(
-        0
-      );
+      setPuntos(0);
+
+      setVidas(3);
+
+      setNivel(1);
+
+      setGameOver(false);
 
 
-      setVidas(
-        3
-      );
-
-
-      setNivel(
-        1
-      );
-
-
-      setGameOver(
-        false
-      );
-
-
-      estadoRef.current.gameOver =
+      estadoRef.current
+        .gameOver =
         false;
 
 
@@ -281,20 +295,13 @@ function Asteroids({
 
 
       controlesRef.current = {
-        izquierda:
-          false,
-
-        derecha:
-          false,
-
-        arriba:
-          false,
+        izquierda: false,
+        derecha: false,
+        arriba: false,
       };
 
 
-      cargarNivel(
-        1
-      );
+      cargarNivel(1);
     }, [
       cargarNivel,
     ]);
@@ -308,16 +315,20 @@ function Asteroids({
 
 
   /*
-  ==========================================
+  ==========================================================
   DISPARAR
-  ==========================================
+  ==========================================================
+
+  No comprobamos "pausado" aquí porque
+  en móvil el botón DISPARAR también
+  puede ser el primer botón que inicia
+  la partida.
+  ==========================================================
   */
 
   const disparar =
     useCallback(() => {
       if (
-        estadoRef.current
-          .pausado ||
         estadoRef.current
           .gameOver
       ) {
@@ -361,20 +372,23 @@ function Asteroids({
 
 
   /*
-  ==========================================
+  ==========================================================
   CONTROLES
-  ==========================================
+  ==========================================================
   */
 
   useEffect(() => {
     const controlar =
-      (evento) => {
+      (
+        evento
+      ) => {
         const {
           juego,
           accion,
           activo,
         } =
-          evento.detail || {};
+          evento.detail ||
+          {};
 
 
         if (
@@ -384,6 +398,12 @@ function Asteroids({
           return;
         }
 
+
+        /*
+        ==========================================
+        DISPARO
+        ==========================================
+        */
 
         if (
           accion ===
@@ -398,6 +418,82 @@ function Asteroids({
           return;
         }
 
+
+        /*
+        ==========================================
+        PROPULSOR TÁCTIL
+        ==========================================
+        */
+
+        if (
+          accion ===
+          "propulsar"
+        ) {
+          controlesRef
+            .current
+            .arriba =
+            Boolean(
+              activo
+            );
+
+          return;
+        }
+
+
+        /*
+        ==========================================
+        CRUCETA TÁCTIL
+
+        La pulsación cambia directamente
+        el ángulo de la nave.
+        ==========================================
+        */
+
+        if (
+          Object.prototype
+            .hasOwnProperty
+            .call(
+              ANGULOS_TACTILES,
+              accion
+            )
+        ) {
+          if (
+            activo
+          ) {
+            naveRef.current
+              .angulo =
+              ANGULOS_TACTILES[
+                accion
+              ];
+
+
+            /*
+            Evita que una tecla de PC
+            que hubiese quedado activa
+            interfiera con el mando touch.
+            */
+
+            controlesRef.current
+              .izquierda =
+              false;
+
+            controlesRef.current
+              .derecha =
+              false;
+          }
+
+          return;
+        }
+
+
+        /*
+        ==========================================
+        TECLADO DE COMPUTADORA
+
+        ← → gira.
+        ↑ activa propulsor.
+        ==========================================
+        */
 
         if (
           accion ===
@@ -435,9 +531,9 @@ function Asteroids({
 
 
   /*
-  ==========================================
+  ==========================================================
   PERDER VIDA
-  ==========================================
+  ==========================================================
   */
 
   const perderVida =
@@ -463,6 +559,13 @@ function Asteroids({
               true;
 
 
+            controlesRef.current = {
+              izquierda: false,
+              derecha: false,
+              arriba: false,
+            };
+
+
             return 0;
           }
 
@@ -481,6 +584,13 @@ function Asteroids({
             nuevaNave;
 
 
+          controlesRef.current = {
+            izquierda: false,
+            derecha: false,
+            arriba: false,
+          };
+
+
           return restantes;
         }
       );
@@ -488,18 +598,17 @@ function Asteroids({
 
 
   /*
-  ==========================================
-  IMPACTOS
-  ==========================================
+  ==========================================================
+  IMPACTOS DE DISPAROS
+  ==========================================================
   */
 
   const resolverImpactos =
     useCallback(() => {
-      const asteroides =
-        [
-          ...asteroidesRef
-            .current,
-        ];
+      const asteroides = [
+        ...asteroidesRef
+          .current,
+      ];
 
 
       const disparosActivos =
@@ -532,7 +641,6 @@ function Asteroids({
           if (
             !colisionCirculos(
               disparo,
-
               asteroide
             )
           ) {
@@ -583,7 +691,8 @@ function Asteroids({
 
         if (
           !destruido &&
-          disparo.vida > 0
+          disparo.vida >
+            0
         ) {
           disparosActivos.push(
             disparo
@@ -610,9 +719,9 @@ function Asteroids({
 
 
   /*
-  ==========================================
-  COLISIÓN DE NAVE
-  ==========================================
+  ==========================================================
+  COLISIÓN DE LA NAVE
+  ==========================================================
   */
 
   const revisarColisionNave =
@@ -637,7 +746,6 @@ function Asteroids({
             ) =>
               colisionCirculos(
                 nave,
-
                 asteroide
               )
           );
@@ -654,9 +762,9 @@ function Asteroids({
 
 
   /*
-  ==========================================
+  ==========================================================
   PASAR DE NIVEL
-  ==========================================
+  ==========================================================
   */
 
   const comprobarNivel =
@@ -691,7 +799,6 @@ function Asteroids({
                 siguiente
               );
             },
-
             550
           );
 
@@ -705,9 +812,9 @@ function Asteroids({
 
 
   /*
-  ==========================================
+  ==========================================================
   DIBUJAR
-  ==========================================
+  ==========================================================
   */
 
   const dibujar =
@@ -729,10 +836,45 @@ function Asteroids({
         );
 
 
-      const colores =
-        configuracion
-          .colores;
+      if (
+        !ctx
+      ) {
+        return;
+      }
 
+
+      const colores = {
+        fondo:
+          configuracion
+            ?.colores
+            ?.fondo ||
+          "#02040a",
+
+        nave:
+          configuracion
+            ?.colores
+            ?.nave ||
+          "#00eaff",
+
+        asteroide:
+          configuracion
+            ?.colores
+            ?.asteroide ||
+          "#ff8c32",
+
+        disparo:
+          configuracion
+            ?.colores
+            ?.disparo ||
+          "#ff2f91",
+      };
+
+
+      /*
+      ==========================================
+      FONDO
+      ==========================================
+      */
 
       ctx.fillStyle =
         colores.fondo;
@@ -747,12 +889,13 @@ function Asteroids({
 
 
       /*
+      ==========================================
       ESTRELLAS
+      ==========================================
       */
 
       ctx.fillStyle =
         "#ffffff";
-
 
       ctx.globalAlpha =
         0.3;
@@ -816,7 +959,9 @@ function Asteroids({
 
 
       /*
+      ==========================================
       ASTEROIDES
+      ==========================================
       */
 
       for (
@@ -883,7 +1028,8 @@ function Asteroids({
 
 
               if (
-                indice === 0
+                indice ===
+                0
               ) {
                 ctx.moveTo(
                   x,
@@ -932,7 +1078,9 @@ function Asteroids({
 
 
       /*
+      ==========================================
       DISPAROS
+      ==========================================
       */
 
       for (
@@ -972,7 +1120,9 @@ function Asteroids({
 
 
       /*
+      ==========================================
       NAVE
+      ==========================================
       */
 
       const nave =
@@ -1028,8 +1178,7 @@ function Asteroids({
 
 
         ctx.moveTo(
-          nave.radio +
-            9,
+          nave.radio + 9,
           0
         );
 
@@ -1061,6 +1210,10 @@ function Asteroids({
         ctx.stroke();
 
 
+        /*
+        PROPULSOR VISUAL
+        */
+
         if (
           nave.acelerando
         ) {
@@ -1070,6 +1223,7 @@ function Asteroids({
           ctx.moveTo(
             -nave.radio *
               0.55,
+
             nave.radio *
               0.35
           );
@@ -1080,6 +1234,7 @@ function Asteroids({
               18 -
               Math.random() *
                 7,
+
             0
           );
 
@@ -1087,6 +1242,7 @@ function Asteroids({
           ctx.lineTo(
             -nave.radio *
               0.55,
+
             -nave.radio *
               0.35
           );
@@ -1094,6 +1250,14 @@ function Asteroids({
 
           ctx.strokeStyle =
             colores.disparo;
+
+
+          ctx.shadowColor =
+            colores.disparo;
+
+
+          ctx.shadowBlur =
+            15;
 
 
           ctx.stroke();
@@ -1105,15 +1269,18 @@ function Asteroids({
 
 
       ctx.restore();
+
+      ctx.shadowBlur =
+        0;
     }, [
       configuracion,
     ]);
 
 
   /*
-  ==========================================
+  ==========================================================
   LOOP PRINCIPAL
-  ==========================================
+  ==========================================================
   */
 
   useEffect(() => {
@@ -1164,7 +1331,6 @@ function Asteroids({
               ) => {
                 actualizarAsteroide(
                   asteroide,
-
                   delta
                 );
               }
@@ -1178,7 +1344,6 @@ function Asteroids({
               ) => {
                 actualizarDisparo(
                   disparo,
-
                   delta
                 );
               }
@@ -1198,9 +1363,7 @@ function Asteroids({
 
           resolverImpactos();
 
-
           revisarColisionNave();
-
 
           comprobarNivel();
         }
@@ -1238,6 +1401,12 @@ function Asteroids({
     revisarColisionNave,
   ]);
 
+
+  /*
+  ==========================================================
+  INTERFAZ
+  ==========================================================
+  */
 
   return (
     <div className="asteroids-juego">
@@ -1306,6 +1475,7 @@ function Asteroids({
 
         {pausado &&
           !gameOver && (
+
           <div className="overlay-estado-juego">
 
             <strong>
@@ -1314,40 +1484,42 @@ function Asteroids({
 
 
             <small>
-              Pulsa ▶ para comenzar
+              Toca cualquier control para comenzar
             </small>
 
 
             <div className="instrucciones-asteroids">
 
               <span>
-                ◀ ▶ Girar
+                Cruceta = dirección
               </span>
 
-
               <span>
-                ▲ Acelerar
+                PROPULSOR = avanzar
               </span>
 
-
               <span>
-                A / ESPACIO Disparar
+                DISPARAR = atacar
               </span>
 
             </div>
 
           </div>
+
         )}
 
 
         {avisoNivel && (
+
           <div className="aviso-nivel-asteroids">
             {avisoNivel}
           </div>
+
         )}
 
 
         {gameOver && (
+
           <div className="overlay-estado-juego">
 
             <strong>
@@ -1361,8 +1533,7 @@ function Asteroids({
 
 
             <span>
-              Nivel alcanzado:
-              {" "}
+              Nivel alcanzado:{" "}
               {nivel}
             </span>
 
@@ -1377,6 +1548,7 @@ function Asteroids({
             </button>
 
           </div>
+
         )}
 
       </div>
