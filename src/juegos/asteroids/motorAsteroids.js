@@ -4,18 +4,49 @@ export const ALTO_MUNDO = 650;
 
 export const RADIO_NAVE = 16;
 
-export const VELOCIDAD_GIRO = 0.067;
 
-export const ACELERACION_NAVE = 0.14;
+/*
+==========================================================
+NAVE
 
-export const FRICCION_NAVE = 0.992;
+Se redujeron estos valores para que
+la nave sea más fácil de controlar,
+especialmente desde teléfono.
+==========================================================
+*/
+
+export const VELOCIDAD_GIRO = 0.052;
+
+export const ACELERACION_NAVE = 0.09;
+
+export const FRICCION_NAVE = 0.988;
+
+
+/*
+==========================================================
+DISPAROS
+==========================================================
+*/
 
 export const VELOCIDAD_DISPARO = 9;
 
 export const DURACION_DISPARO = 80;
 
+
+/*
+==========================================================
+INVULNERABILIDAD
+==========================================================
+*/
+
 export const TIEMPO_INVULNERABLE = 1800;
 
+
+/*
+==========================================================
+ALEATORIO
+==========================================================
+*/
 
 function aleatorio(
   minimo,
@@ -31,6 +62,12 @@ function aleatorio(
   );
 }
 
+
+/*
+==========================================================
+DISTANCIA
+==========================================================
+*/
 
 export function distancia(
   primero,
@@ -50,6 +87,15 @@ export function distancia(
   );
 }
 
+
+/*
+==========================================================
+ENVOLVER OBJETOS
+
+Cuando un objeto sale de un extremo
+de la pantalla aparece por el otro.
+==========================================================
+*/
 
 export function envolverObjeto(
   objeto,
@@ -96,6 +142,12 @@ export function envolverObjeto(
 }
 
 
+/*
+==========================================================
+CREAR NAVE
+==========================================================
+*/
+
 export function crearNave() {
   return {
     x:
@@ -124,6 +176,12 @@ export function crearNave() {
 }
 
 
+/*
+==========================================================
+CREAR ASTEROIDE
+==========================================================
+*/
+
 export function crearAsteroide({
   nivel = 1,
   multiplicadorVelocidad = 1,
@@ -141,6 +199,7 @@ export function crearAsteroide({
     "mediano"
   ) {
     radio = 28;
+
     puntos = 50;
   }
 
@@ -150,6 +209,7 @@ export function crearAsteroide({
     "pequeno"
   ) {
     radio = 16;
+
     puntos = 100;
   }
 
@@ -229,6 +289,11 @@ export function crearAsteroide({
     Math.PI *
     2;
 
+
+  /*
+  Aumenta gradualmente
+  conforme avanza el nivel.
+  */
 
   const velocidadBase =
     (
@@ -315,6 +380,12 @@ export function crearAsteroide({
 }
 
 
+/*
+==========================================================
+CREAR OLEADA
+==========================================================
+*/
+
 export function crearOleadaAsteroides(
   cantidad,
   nivel,
@@ -338,6 +409,12 @@ export function crearOleadaAsteroides(
   );
 }
 
+
+/*
+==========================================================
+DIVIDIR ASTEROIDE
+==========================================================
+*/
 
 export function dividirAsteroide(
   asteroide,
@@ -377,6 +454,7 @@ export function dividirAsteroide(
         asteroide.y,
     }),
 
+
     crearAsteroide({
       nivel,
 
@@ -396,6 +474,12 @@ export function dividirAsteroide(
   ];
 }
 
+
+/*
+==========================================================
+CREAR DISPARO
+==========================================================
+*/
 
 export function crearDisparo(
   nave
@@ -446,11 +530,21 @@ export function crearDisparo(
 }
 
 
+/*
+==========================================================
+ACTUALIZAR NAVE
+==========================================================
+*/
+
 export function actualizarNave(
   nave,
   controles,
   delta = 1
 ) {
+  /*
+  GIRAR IZQUIERDA
+  */
+
   if (
     controles.izquierda
   ) {
@@ -460,6 +554,10 @@ export function actualizarNave(
   }
 
 
+  /*
+  GIRAR DERECHA
+  */
+
   if (
     controles.derecha
   ) {
@@ -468,6 +566,10 @@ export function actualizarNave(
       delta;
   }
 
+
+  /*
+  PROPULSOR
+  */
 
   nave.acelerando =
     Boolean(
@@ -495,6 +597,13 @@ export function actualizarNave(
   }
 
 
+  /*
+  FRICCIÓN
+
+  Hace que la nave vaya
+  perdiendo velocidad gradualmente.
+  */
+
   nave.velocidadX *=
     Math.pow(
       FRICCION_NAVE,
@@ -509,6 +618,10 @@ export function actualizarNave(
     );
 
 
+  /*
+  CALCULAR VELOCIDAD TOTAL
+  */
+
   const magnitud =
     Math.sqrt(
       nave.velocidadX *
@@ -518,8 +631,16 @@ export function actualizarNave(
     );
 
 
+  /*
+  VELOCIDAD MÁXIMA
+
+  Antes estaba en 6.4.
+  La bajamos a 4.2 para
+  mejorar el control.
+  */
+
   const maxima =
-    6.4;
+    4.2;
 
 
   if (
@@ -543,6 +664,10 @@ export function actualizarNave(
   }
 
 
+  /*
+  APLICAR MOVIMIENTO
+  */
+
   nave.x +=
     nave.velocidadX *
     delta;
@@ -553,12 +678,22 @@ export function actualizarNave(
     delta;
 
 
+  /*
+  ENVOLVER EN LOS BORDES
+  */
+
   envolverObjeto(
     nave,
     nave.radio
   );
 }
 
+
+/*
+==========================================================
+ACTUALIZAR ASTEROIDE
+==========================================================
+*/
 
 export function actualizarAsteroide(
   asteroide,
@@ -586,6 +721,12 @@ export function actualizarAsteroide(
 }
 
 
+/*
+==========================================================
+ACTUALIZAR DISPARO
+==========================================================
+*/
+
 export function actualizarDisparo(
   disparo,
   delta = 1
@@ -610,6 +751,12 @@ export function actualizarDisparo(
   );
 }
 
+
+/*
+==========================================================
+COLISIÓN ENTRE CÍRCULOS
+==========================================================
+*/
 
 export function colisionCirculos(
   primero,

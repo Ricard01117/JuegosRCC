@@ -23,10 +23,13 @@ function BotonControl({
   accion,
   children,
   clase = "",
+  onComenzar,
 }) {
   const activar =
     (evento) => {
       evento.preventDefault();
+
+      onComenzar?.();
 
       enviarControl(
         juego,
@@ -73,143 +76,138 @@ function BotonControl({
 }
 
 
-function Cruceta({
-  juego,
-  mostrarArriba = true,
-  mostrarAbajo = true,
-}) {
-  return (
-    <div className="cruceta-touch">
-
-      {mostrarArriba ? (
-        <BotonControl
-          juego={juego}
-          accion="arriba"
-          clase="control-arriba"
-        >
-          ▲
-        </BotonControl>
-      ) : (
-        <span />
-      )}
-
-
-      <BotonControl
-        juego={juego}
-        accion="izquierda"
-        clase="control-izquierda"
-      >
-        ◀
-      </BotonControl>
-
-
-      <div className="centro-cruceta" />
-
-
-      <BotonControl
-        juego={juego}
-        accion="derecha"
-        clase="control-derecha"
-      >
-        ▶
-      </BotonControl>
-
-
-      {mostrarAbajo ? (
-        <BotonControl
-          juego={juego}
-          accion="abajo"
-          clase="control-abajo"
-        >
-          ▼
-        </BotonControl>
-      ) : (
-        <span />
-      )}
-
-    </div>
-  );
-}
-
-
 function ControlesTouch({
   juego,
+  onComenzar,
 }) {
   /*
-  ==========================================
-  TETRIS
-
-  No utiliza botones táctiles.
-  Se controla directamente
-  tocando y arrastrando el tablero.
-  ==========================================
+  Tetris y Pac-Man se controlan
+  directamente sobre el tablero.
   */
 
   if (
-    juego ===
-    "tetris"
+    juego === "tetris" ||
+    juego === "pacman"
   ) {
     return null;
   }
 
 
+  /*
+  Flappy se controla tocando
+  directamente el juego.
+  */
+
   if (
-    juego ===
-    "flappy"
+    juego === "flappy"
+  ) {
+    return null;
+  }
+
+
+  /*
+  ASTEROIDES
+
+  Izquierda:
+  barra de dirección.
+
+  Derecha:
+  propulsor y disparo separados.
+  */
+
+  if (
+    juego === "asteroids"
   ) {
     return (
-      <div className="controles-touch controles-flappy">
+      <div className="controles-touch controles-asteroids-nuevos">
 
-        <BotonControl
-          juego={juego}
-          accion="saltar"
-          clase="boton-touch-grande"
-        >
-          SALTAR
-        </BotonControl>
+        <div className="asteroids-direccion">
+
+          <span className="asteroids-control-titulo">
+            GIRO
+          </span>
+
+
+          <div className="asteroids-barra-giro">
+
+            <BotonControl
+              juego="asteroids"
+              accion="izquierda"
+              clase="asteroids-giro-izquierda"
+              onComenzar={
+                onComenzar
+              }
+            >
+              ◀
+            </BotonControl>
+
+
+            <div className="asteroids-barra-centro">
+              ◇
+            </div>
+
+
+            <BotonControl
+              juego="asteroids"
+              accion="derecha"
+              clase="asteroids-giro-derecha"
+              onComenzar={
+                onComenzar
+              }
+            >
+              ▶
+            </BotonControl>
+
+          </div>
+
+        </div>
+
+
+        <div className="asteroids-acciones">
+
+          <BotonControl
+            juego="asteroids"
+            accion="arriba"
+            clase="asteroids-propulsor"
+            onComenzar={
+              onComenzar
+            }
+          >
+            <span>
+              ▲
+            </span>
+
+            <strong>
+              PROPULSOR
+            </strong>
+          </BotonControl>
+
+
+          <BotonControl
+            juego="asteroids"
+            accion="disparar"
+            clase="asteroids-disparo"
+            onComenzar={
+              onComenzar
+            }
+          >
+            <span>
+              ●
+            </span>
+
+            <strong>
+              DISPARAR
+            </strong>
+          </BotonControl>
+
+        </div>
 
       </div>
     );
   }
 
 
-  if (
-    juego ===
-    "asteroids"
-  ) {
-    return (
-      <div className="controles-touch controles-con-accion">
-
-        <Cruceta
-          juego={juego}
-          mostrarAbajo={
-            false
-          }
-        />
-
-
-        <BotonControl
-          juego={juego}
-          accion="disparar"
-          clase="boton-accion-touch"
-        >
-          A
-        </BotonControl>
-
-      </div>
-    );
-  }
-
-
-  return (
-    <div className="controles-touch">
-
-      <Cruceta
-        juego={juego}
-      />
-
-    </div>
-  );
+  return null;
 }
 
 

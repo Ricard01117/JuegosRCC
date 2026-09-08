@@ -4,16 +4,13 @@ import {
   useState,
 } from "react";
 
-
 import {
   useJuego,
 } from "../../contexto/ContextoJuego";
 
-
 import {
   JUEGOS,
 } from "../../datos/juegos";
-
 
 import {
   cargarConfiguracionJuego,
@@ -21,45 +18,68 @@ import {
   restablecerConfiguracionJuego,
 } from "../../servicios/almacenamiento";
 
-
 import ConfiguracionJuego from "./ConfiguracionJuego";
-
 import ControlesTouch from "./ControlesTouch";
 
-
 import Tetris from "../../juegos/tetris/Tetris";
-
 import Asteroids from "../../juegos/asteroids/Asteroids";
-
 import Flappy from "../../juegos/flappy/Flappy";
-
 import Pacman from "../../juegos/pacman/Pacman";
 
 
-function formatearTiempo(
-  segundos
-) {
+function formatearTiempo(segundos) {
   const minutos =
     Math.floor(
       segundos / 60
     );
 
-
   const resto =
     segundos % 60;
 
-
-  return `${String(
-    minutos
-  ).padStart(
+  return `${String(minutos).padStart(
     2,
     "0"
-  )}:${String(
-    resto
-  ).padStart(
+  )}:${String(resto).padStart(
     2,
     "0"
   )}`;
+}
+
+
+function enviarControl(
+  juego,
+  accion
+) {
+  window.dispatchEvent(
+    new CustomEvent(
+      "juegosrcc-control",
+      {
+        detail: {
+          juego,
+          accion,
+          activo: true,
+        },
+      }
+    )
+  );
+
+  window.setTimeout(
+    () => {
+      window.dispatchEvent(
+        new CustomEvent(
+          "juegosrcc-control",
+          {
+            detail: {
+              juego,
+              accion,
+              activo: false,
+            },
+          }
+        )
+      );
+    },
+    90
+  );
 }
 
 
@@ -69,46 +89,32 @@ function JuegoModal() {
     cerrarJuego,
   } = useJuego();
 
-
   const [
     pausado,
     setPausado,
-  ] = useState(
-    true
-  );
-
+  ] = useState(true);
 
   const [
     segundos,
     setSegundos,
-  ] = useState(
-    0
-  );
-
+  ] = useState(0);
 
   const [
     mostrarConfiguracion,
     setMostrarConfiguracion,
-  ] = useState(
-    false
-  );
-
+  ] = useState(false);
 
   const [
     configuracion,
     setConfiguracion,
-  ] = useState(
-    null
-  );
+  ] = useState(null);
 
 
   const juego =
     useMemo(
       () =>
         JUEGOS.find(
-          (
-            elemento
-          ) =>
+          (elemento) =>
             elemento.codigo ===
             juegoActivo
         ),
@@ -123,16 +129,13 @@ function JuegoModal() {
     juegoActivo ===
     "tetris";
 
-
   const esAsteroids =
     juegoActivo ===
     "asteroids";
 
-
   const esFlappy =
     juegoActivo ===
     "flappy";
-
 
   const esPacman =
     juegoActivo ===
@@ -152,21 +155,13 @@ function JuegoModal() {
       return;
     }
 
+    setPausado(true);
 
-    setPausado(
-      true
-    );
-
-
-    setSegundos(
-      0
-    );
-
+    setSegundos(0);
 
     setMostrarConfiguracion(
       false
     );
-
 
     setConfiguracion(
       cargarConfiguracionJuego(
@@ -191,7 +186,6 @@ function JuegoModal() {
     ) {
       return;
     }
-
 
     guardarConfiguracionJuego(
       juegoActivo,
@@ -218,21 +212,16 @@ function JuegoModal() {
       return undefined;
     }
 
-
     const reloj =
       window.setInterval(
         () => {
           setSegundos(
-            (
-              actual
-            ) =>
+            (actual) =>
               actual + 1
           );
         },
-
         1000
       );
-
 
     return () => {
       window.clearInterval(
@@ -248,7 +237,7 @@ function JuegoModal() {
 
   /*
   ==========================================================
-  BLOQUEAR SCROLL EXTERIOR
+  BLOQUEAR SCROLL DE LA PÁGINA
   ==========================================================
   */
 
@@ -259,21 +248,18 @@ function JuegoModal() {
       return undefined;
     }
 
-
-    const overflowAnterior =
+    const anterior =
       document.body.style
         .overflow;
-
 
     document.body.style
       .overflow =
       "hidden";
 
-
     return () => {
       document.body.style
         .overflow =
-        overflowAnterior;
+        anterior;
     };
   }, [
     juegoActivo,
@@ -282,7 +268,7 @@ function JuegoModal() {
 
   /*
   ==========================================================
-  TECLADO
+  CONTROL DE TECLADO
   ==========================================================
   */
 
@@ -295,16 +281,10 @@ function JuegoModal() {
 
 
     const obtenerAccion =
-      (
-        tecla
-      ) => {
+      (tecla) => {
         const normalizada =
           tecla.toLowerCase();
 
-
-        /*
-        ARRIBA
-        */
 
         if (
           tecla ===
@@ -318,14 +298,9 @@ function JuegoModal() {
             return "saltar";
           }
 
-
           return "arriba";
         }
 
-
-        /*
-        ABAJO
-        */
 
         if (
           tecla ===
@@ -337,10 +312,6 @@ function JuegoModal() {
         }
 
 
-        /*
-        IZQUIERDA
-        */
-
         if (
           tecla ===
             "ArrowLeft" ||
@@ -350,10 +321,6 @@ function JuegoModal() {
           return "izquierda";
         }
 
-
-        /*
-        DERECHA
-        */
 
         if (
           tecla ===
@@ -365,13 +332,8 @@ function JuegoModal() {
         }
 
 
-        /*
-        ESPACIO
-        */
-
         if (
-          tecla ===
-          " "
+          tecla === " "
         ) {
           if (
             esFlappy
@@ -379,13 +341,11 @@ function JuegoModal() {
             return "saltar";
           }
 
-
           if (
             esAsteroids
           ) {
             return "disparar";
           }
-
 
           if (
             esTetris
@@ -393,20 +353,7 @@ function JuegoModal() {
             return "caer";
           }
 
-
-          /*
-          Pac-Man solamente
-          utiliza direcciones.
-          */
-
-          if (
-            esPacman
-          ) {
-            return null;
-          }
-
-
-          return "accion";
+          return null;
         }
 
 
@@ -415,19 +362,12 @@ function JuegoModal() {
 
 
     const bajarTecla =
-      (
-        evento
-      ) => {
-        /*
-        ESC
-        */
-
+      (evento) => {
         if (
           evento.key ===
           "Escape"
         ) {
           evento.preventDefault();
-
 
           if (
             mostrarConfiguracion
@@ -439,17 +379,11 @@ function JuegoModal() {
             return;
           }
 
-
           cerrarJuego();
-
 
           return;
         }
 
-
-        /*
-        P = PAUSA
-        */
 
         if (
           evento.key
@@ -462,27 +396,16 @@ function JuegoModal() {
             return;
           }
 
-
           evento.preventDefault();
 
-
           setPausado(
-            (
-              actual
-            ) =>
+            (actual) =>
               !actual
           );
-
 
           return;
         }
 
-
-        /*
-        IGNORAR CONTROLES
-        MIENTRAS ESTÁ ABIERTA
-        LA CONFIGURACIÓN
-        */
 
         if (
           mostrarConfiguracion
@@ -496,7 +419,6 @@ function JuegoModal() {
             evento.key
           );
 
-
         if (
           !accion
         ) {
@@ -504,13 +426,43 @@ function JuegoModal() {
         }
 
 
-        evento.preventDefault();
+        /*
+        La primera tecla también
+        comienza la partida.
+        */
 
+        if (
+          pausado
+        ) {
+          setPausado(false);
+
+          /*
+          En Flappy la primera tecla
+          también debe producir salto.
+          */
+
+          if (
+            esFlappy
+          ) {
+            window.setTimeout(
+              () =>
+                enviarControl(
+                  "flappy",
+                  "saltar"
+                ),
+              60
+            );
+          }
+
+          return;
+        }
+
+
+        evento.preventDefault();
 
         window.dispatchEvent(
           new CustomEvent(
             "juegosrcc-control",
-
             {
               detail: {
                 juego:
@@ -518,8 +470,7 @@ function JuegoModal() {
 
                 accion,
 
-                activo:
-                  true,
+                activo: true,
               },
             }
           )
@@ -528,21 +479,17 @@ function JuegoModal() {
 
 
     const subirTecla =
-      (
-        evento
-      ) => {
+      (evento) => {
         if (
           mostrarConfiguracion
         ) {
           return;
         }
 
-
         const accion =
           obtenerAccion(
             evento.key
           );
-
 
         if (
           !accion
@@ -550,14 +497,9 @@ function JuegoModal() {
           return;
         }
 
-
-        evento.preventDefault();
-
-
         window.dispatchEvent(
           new CustomEvent(
             "juegosrcc-control",
-
             {
               detail: {
                 juego:
@@ -565,8 +507,7 @@ function JuegoModal() {
 
                 accion,
 
-                activo:
-                  false,
+                activo: false,
               },
             }
           )
@@ -578,7 +519,6 @@ function JuegoModal() {
       "keydown",
       bajarTecla
     );
-
 
     window.addEventListener(
       "keyup",
@@ -592,7 +532,6 @@ function JuegoModal() {
         bajarTecla
       );
 
-
       window.removeEventListener(
         "keyup",
         subirTecla
@@ -602,6 +541,7 @@ function JuegoModal() {
     juegoActivo,
     cerrarJuego,
     mostrarConfiguracion,
+    pausado,
     esTetris,
     esAsteroids,
     esFlappy,
@@ -611,9 +551,73 @@ function JuegoModal() {
 
   /*
   ==========================================================
-  SIN JUEGO
+  INICIAR TOCANDO LA PANTALLA
+  ==========================================================
+
+  TETRIS:
+  Primer toque = iniciar.
+
+  FLAPPY:
+  Primer toque = iniciar + saltar.
+
+  PAC-MAN:
+  Primer toque = iniciar.
+
+  ASTEROIDES:
+  Se inicia desde sus controles ergonómicos.
   ==========================================================
   */
+
+  const tocarLienzo =
+    (evento) => {
+      if (
+        mostrarConfiguracion ||
+        !pausado
+      ) {
+        return;
+      }
+
+
+      if (
+        !esTetris &&
+        !esFlappy &&
+        !esPacman
+      ) {
+        return;
+      }
+
+
+      const objetivo =
+        evento.target;
+
+
+      if (
+        objetivo.closest?.(
+          "button"
+        )
+      ) {
+        return;
+      }
+
+
+      setPausado(false);
+
+
+      if (
+        esFlappy
+      ) {
+        window.setTimeout(
+          () => {
+            enviarControl(
+              "flappy",
+              "saltar"
+            );
+          },
+          80
+        );
+      }
+    };
+
 
   if (
     !juegoActivo ||
@@ -624,50 +628,25 @@ function JuegoModal() {
   }
 
 
-  /*
-  ==========================================================
-  RESTABLECER
-  ==========================================================
-  */
-
   const restablecer =
     () => {
-      const nueva =
+      setConfiguracion(
         restablecerConfiguracionJuego(
           juegoActivo
-        );
-
-
-      setConfiguracion(
-        nueva
+        )
       );
     };
 
 
-  /*
-  ==========================================================
-  ABRIR CONFIGURACIÓN
-  ==========================================================
-  */
-
   const abrirConfiguracion =
     () => {
-      setPausado(
-        true
-      );
-
+      setPausado(true);
 
       setMostrarConfiguracion(
         true
       );
     };
 
-
-  /*
-  ==========================================================
-  CLASE DEL MODAL
-  ==========================================================
-  */
 
   let claseModal =
     "juego-modal juego-modal-nuevo";
@@ -680,14 +659,12 @@ function JuegoModal() {
       " juego-modal-tetris";
   }
 
-
   if (
     esAsteroids
   ) {
     claseModal +=
       " juego-modal-asteroids";
   }
-
 
   if (
     esFlappy
@@ -696,7 +673,6 @@ function JuegoModal() {
       " juego-modal-flappy";
   }
 
-
   if (
     esPacman
   ) {
@@ -704,12 +680,6 @@ function JuegoModal() {
       " juego-modal-pacman";
   }
 
-
-  /*
-  ==========================================================
-  TEXTO DEL NIVEL
-  ==========================================================
-  */
 
   let textoProgresion =
     configuracion
@@ -725,14 +695,12 @@ function JuegoModal() {
       "12 NIVELES AUTOMÁTICOS";
   }
 
-
   if (
     esFlappy
   ) {
     textoProgresion =
       "10 NIVELES AUTOMÁTICOS";
   }
-
 
   if (
     esPacman
@@ -741,12 +709,6 @@ function JuegoModal() {
       "10 NIVELES AUTOMÁTICOS";
   }
 
-
-  /*
-  ==========================================================
-  RENDER
-  ==========================================================
-  */
 
   return (
     <div className="juego-modal-overlay">
@@ -757,10 +719,6 @@ function JuegoModal() {
         }
       >
 
-        {/* ================================================
-            CABECERA
-        ================================================= */}
-
         <header className="barra-juego">
 
           <div className="barra-juego-identidad">
@@ -769,11 +727,9 @@ function JuegoModal() {
               JUEGOSRCC
             </span>
 
-
             <h2>
               {juego.nombre}
             </h2>
-
 
             <small>
               {textoProgresion}
@@ -785,25 +741,20 @@ function JuegoModal() {
           <div className="barra-juego-acciones">
 
             <span className="reloj-juego">
-
               {formatearTiempo(
                 segundos
               )}
-
             </span>
 
 
             <button
               type="button"
               className="boton-control-superior"
-              onClick={
-                () =>
-                  setPausado(
-                    (
-                      actual
-                    ) =>
-                      !actual
-                  )
+              onClick={() =>
+                setPausado(
+                  (actual) =>
+                    !actual
+                )
               }
               title={
                 pausado
@@ -852,14 +803,14 @@ function JuegoModal() {
         </header>
 
 
-        {/* ================================================
-            JUEGO
-        ================================================= */}
-
-        <div className="lienzo-juego-contenedor">
+        <div
+          className="lienzo-juego-contenedor"
+          onPointerDown={
+            tocarLienzo
+          }
+        >
 
           {esTetris && (
-
             <Tetris
               pausado={
                 pausado ||
@@ -869,12 +820,10 @@ function JuegoModal() {
                 configuracion
               }
             />
-
           )}
 
 
           {esAsteroids && (
-
             <Asteroids
               pausado={
                 pausado ||
@@ -884,12 +833,10 @@ function JuegoModal() {
                 configuracion
               }
             />
-
           )}
 
 
           {esFlappy && (
-
             <Flappy
               pausado={
                 pausado ||
@@ -899,12 +846,10 @@ function JuegoModal() {
                 configuracion
               }
             />
-
           )}
 
 
           {esPacman && (
-
             <Pacman
               pausado={
                 pausado ||
@@ -914,219 +859,120 @@ function JuegoModal() {
                 configuracion
               }
             />
-
-          )}
-
-
-          {!esTetris &&
-            !esAsteroids &&
-            !esFlappy &&
-            !esPacman && (
-
-            <div className="lienzo-juego-provisional">
-
-              <strong>
-                {juego.icono}
-              </strong>
-
-
-              <h3>
-                PULSA ▶ PARA JUGAR
-              </h3>
-
-
-              <small>
-                Juego en desarrollo.
-              </small>
-
-            </div>
-
           )}
 
         </div>
 
 
-        {/* ================================================
-            CONTROLES TOUCH
-        ================================================= */}
-
         {esAsteroids && (
-
           <ControlesTouch
             juego="asteroids"
+            onComenzar={() =>
+              setPausado(false)
+            }
           />
-
         )}
 
-
-        {esFlappy && (
-
-          <ControlesTouch
-            juego="flappy"
-          />
-
-        )}
-
-
-        {/* ================================================
-            AYUDA
-        ================================================= */}
 
         {esTetris && (
-
-          <div className="ayuda-juego ayuda-tetris">
+          <div className="ayuda-juego">
 
             <span>
               ← → mover
             </span>
 
-
             <span>
               ↑ girar
             </span>
-
 
             <span>
               ↓ bajar
             </span>
 
-
             <span>
               ESPACIO caer
             </span>
 
-
             <span>
-              Móvil: arrastrar + tocar
-            </span>
-
-
-            <span>
-              P pausa
-            </span>
-
-
-            <span>
-              ESC salir
+              Móvil: tocar + arrastrar
             </span>
 
           </div>
-
         )}
 
 
         {esAsteroids && (
-
-          <div className="ayuda-juego ayuda-asteroids">
+          <div className="ayuda-juego">
 
             <span>
               ← → girar
             </span>
 
-
             <span>
-              ↑ acelerar
+              ↑ propulsor
             </span>
-
 
             <span>
               ESPACIO disparar
             </span>
 
-
             <span>
-              Móvil: botones touch
-            </span>
-
-
-            <span>
-              P pausa
-            </span>
-
-
-            <span>
-              ESC salir
+              Móvil: barra + 2 botones
             </span>
 
           </div>
-
         )}
 
 
         {esFlappy && (
-
-          <div className="ayuda-juego ayuda-flappy">
+          <div className="ayuda-juego">
 
             <span>
               ESPACIO / ↑
             </span>
 
-
             <span>
               Móvil: tocar pantalla
             </span>
-
 
             <span>
               P pausa
             </span>
 
-
-            <span>
-              ESC salir
-            </span>
-
           </div>
-
         )}
 
 
         {esPacman && (
-
-          <div className="ayuda-juego ayuda-pacman">
+          <div className="ayuda-juego">
 
             <span>
               Flechas / WASD
             </span>
 
-
             <span>
               Móvil: deslizar
             </span>
 
+            <span>
+              5 s de ventaja por nivel
+            </span>
 
             <span>
               🍒 fruta = comer fantasmas
             </span>
 
-
             <span>
               +1 vida por nivel
             </span>
 
-
-            <span>
-              P pausa
-            </span>
-
-
-            <span>
-              ESC salir
-            </span>
-
           </div>
-
         )}
 
       </section>
 
 
-      {/* ================================================
-          CONFIGURACIÓN
-      ================================================= */}
-
       {mostrarConfiguracion && (
-
         <ConfiguracionJuego
           juego={
             juego
@@ -1140,14 +986,12 @@ function JuegoModal() {
           onRestablecer={
             restablecer
           }
-          onCerrar={
-            () =>
-              setMostrarConfiguracion(
-                false
-              )
+          onCerrar={() =>
+            setMostrarConfiguracion(
+              false
+            )
           }
         />
-
       )}
 
     </div>
